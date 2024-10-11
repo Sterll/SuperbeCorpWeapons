@@ -19,6 +19,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    implementation("io.github.rysefoxx.inventory:RyseInventory-Plugin:1.6.5")
 }
 
 def targetJavaVersion = 21

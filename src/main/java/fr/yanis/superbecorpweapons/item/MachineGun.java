@@ -72,7 +72,7 @@ public class MachineGun extends Item {
                             .location(arrow.getLocation())
                             .spawn().particle();
                 }
-            }.runTaskTimer(SCWMain.getInstance(), 0L, 0L);
+            }.runTaskTimerAsynchronously(SCWMain.getInstance(), 0L, 0L);
         }
     }
 

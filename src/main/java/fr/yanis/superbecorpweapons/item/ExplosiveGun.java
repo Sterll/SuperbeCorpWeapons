@@ -7,6 +7,7 @@ import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import fr.yanis.superbecorpweapons.utils.ParticleLib;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -43,12 +44,13 @@ public class ExplosiveGun extends Item {
 
     @Override
     public void onUse(PlayerInteractEvent e) {
-        Entity entity = e.getPlayer().getWorld().spawn(e.getPlayer().getLocation(), Chicken.class);
+        Chicken entity = e.getPlayer().getWorld().spawn(e.getPlayer().getLocation(), Chicken.class);
         entity.customName(Component.text("§cBooooooom dans §b5 §csecondes"));
         entity.setCustomNameVisible(true);
         entity.setInvulnerable(true);
         entity.setGlowing(true);
         entity.setVelocity(e.getPlayer().getLocation().getDirection().multiply(2));
+        entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0);
 
         new BukkitRunnable(){
             int time = 5;

@@ -1,4 +1,4 @@
-package fr.yanis.superbecorpweapons.item;
+package fr.yanis.superbecorpweapons.item.management;
 
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

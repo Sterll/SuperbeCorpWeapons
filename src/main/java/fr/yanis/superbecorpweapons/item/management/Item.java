@@ -13,7 +13,7 @@ public abstract class Item {
     public abstract ItemStack getItem();
 
     public abstract void onUse(PlayerInteractEvent e);
-    public abstract void onProjectileHit(ProjectileHitEvent e);
+    public void onProjectileHit(ProjectileHitEvent e){}
     public void onUseAtEntity(PlayerInteractAtEntityEvent e){}
 
 }

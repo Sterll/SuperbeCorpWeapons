@@ -74,9 +74,4 @@ public class ExplosiveGun extends Item {
         }.runTaskTimer(SCWMain.getInstance(), 0L, 20L);
 
     }
-
-    @Override
-    public void onProjectileHit(ProjectileHitEvent e) {
-
-    }
 }

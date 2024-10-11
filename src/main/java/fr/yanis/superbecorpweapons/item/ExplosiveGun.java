@@ -13,7 +13,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -60,12 +59,7 @@ public class ExplosiveGun extends Item {
                     Location location = entity.getLocation();
                     entity.remove();
                     e.getPlayer().getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
-                    location.getNearbyEntities(5,5,5).forEach(entity1 -> {
-                        if(entity1 instanceof LivingEntity){
-                            ((LivingEntity) entity1).addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 5, 1));
-                        }
-                    });
-                    ParticleLib.spawnDome(location, Color.fromRGB(0, 255, 0), 5);
+                    ParticleLib.spawnDome(location, Color.fromRGB(0,255,0), 5, ExplosiveGun.this);
                     cancel();
                     return;
                 }
@@ -73,5 +67,10 @@ public class ExplosiveGun extends Item {
             }
         }.runTaskTimer(SCWMain.getInstance(), 0L, 20L);
 
+    }
+
+    @Override
+    public void whenEntityIsTouchedByParticle(Entity entity) {
+        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 5, 1));
     }
 }

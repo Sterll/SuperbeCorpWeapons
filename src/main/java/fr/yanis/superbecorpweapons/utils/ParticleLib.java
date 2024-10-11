@@ -15,9 +15,10 @@ import java.util.Collection;
 
 public class ParticleLib {
 
-    public static void spawnDome(Location location, Color color, double maxRadius, Item item) {
+    public static void spawnDome(Location location, Color color, double maxR, Item item) {
         new BukkitRunnable() {
             double radius = 0;
+            double maxRadius = maxR;
             Collection<? extends Entity> entities = location.getWorld().getNearbyEntities(location, 15, 15, 15);
             @Override
             public void run() {
@@ -43,7 +44,7 @@ public class ParticleLib {
                                 item.whenEntityIsTouchedByParticle(entity);
                             }
                         }
-                        location.subtract(x, 0, z);
+                        location.subtract(x, y, z);
                     }
                 }
                 radius += 0.2;

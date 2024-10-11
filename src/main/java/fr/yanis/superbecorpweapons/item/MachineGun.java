@@ -52,10 +52,10 @@ public class MachineGun extends Item {
                             Math.random() * spread - spread / 2
                     ))
             );
+            arrow.setVisibleByDefault(false);
             arrow.setDamage(1.0);
             arrow.setCritical(false);
             arrow.setPickupStatus(Arrow.PickupStatus.DISALLOWED);
-            arrow.setVisibleByDefault(false);
             arrow.customName(Component.text("machine_gun"));
             new BukkitRunnable() {
                 @Override

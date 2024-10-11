@@ -71,6 +71,7 @@ public class ExplosiveGun extends Item {
 
     @Override
     public void whenEntityIsTouchedByParticle(Entity entity) {
+        if(!(entity instanceof LivingEntity)) return;
         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 5, 1));
     }
 }

@@ -8,6 +8,7 @@ public final class SCWMain extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        getCommand("weapons").setExecutor(new CommandWeapons());
         instance = this;
     }
 

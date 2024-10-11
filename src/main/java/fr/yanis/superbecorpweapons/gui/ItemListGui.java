@@ -1,5 +1,6 @@
-package fr.yanis.superbecorpweapons;
+package fr.yanis.superbecorpweapons.gui;
 
+import fr.yanis.superbecorpweapons.SCWMain;
 import fr.yanis.superbecorpweapons.item.ItemManager;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
@@ -9,8 +10,6 @@ import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemListGui implements InventoryProvider {
 

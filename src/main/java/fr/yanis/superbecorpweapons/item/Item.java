@@ -12,6 +12,6 @@ public abstract class Item {
     public abstract ItemStack getItem();
 
     public abstract void onUse(PlayerInteractEvent e);
-    public abstract void onUseAtEntity(PlayerInteractAtEntityEvent e);
+    public void onUseAtEntity(PlayerInteractAtEntityEvent e){}
 
 }

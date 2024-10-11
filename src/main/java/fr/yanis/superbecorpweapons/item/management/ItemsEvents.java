@@ -10,19 +10,19 @@ public class ItemsEvents implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if(event.getItem() == null) return;
-        ItemManager.getItems().forEach((item, itemManager) -> {
-            if(event.getItem() == item) {
-                itemManager.item().onUse(event);
+        for (ItemManager value : ItemManager.getItems().values()) {
+            if(value.item().getItem().isSimilar(event.getItem())) {
+                value.item().onUse(event);
             }
-        });
+        }
     }
 
     @EventHandler
     public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event){
-        ItemManager.getItems().forEach((item, itemManager) -> {
-            if(event.getPlayer().getInventory().getItemInMainHand() == item) {
-                itemManager.item().onUseAtEntity(event);
+        for (ItemManager value : ItemManager.getItems().values()) {
+            if(value.item().getItem().isSimilar(event.getPlayer().getActiveItem())) {
+                value.item().onUseAtEntity(event);
             }
-        });
+        }
     }
 }

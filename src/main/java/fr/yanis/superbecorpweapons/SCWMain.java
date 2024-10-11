@@ -1,5 +1,6 @@
 package fr.yanis.superbecorpweapons;
 
+import fr.yanis.superbecorpweapons.item.ItemsEvents;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SCWMain extends JavaPlugin {
@@ -9,6 +10,7 @@ public final class SCWMain extends JavaPlugin {
     @Override
     public void onEnable() {
         getCommand("weapons").setExecutor(new CommandWeapons());
+        getServer().getPluginManager().registerEvents(new ItemsEvents(), this);
         instance = this;
     }
 

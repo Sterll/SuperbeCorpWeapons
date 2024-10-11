@@ -1,7 +1,7 @@
 package fr.yanis.superbecorpweapons.gui;
 
 import fr.yanis.superbecorpweapons.SCWMain;
-import fr.yanis.superbecorpweapons.item.ItemManager;
+import fr.yanis.superbecorpweapons.item.management.ItemManager;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;

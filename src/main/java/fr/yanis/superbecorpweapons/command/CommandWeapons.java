@@ -1,6 +1,6 @@
 package fr.yanis.superbecorpweapons.command;
 
-import fr.yanis.superbecorpweapons.item.ItemManager;
+import fr.yanis.superbecorpweapons.item.management.ItemManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

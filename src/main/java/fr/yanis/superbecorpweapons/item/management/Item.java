@@ -1,5 +1,6 @@
 package fr.yanis.superbecorpweapons.item.management;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -15,5 +16,7 @@ public abstract class Item {
     public abstract void onUse(PlayerInteractEvent e);
     public void onProjectileHit(ProjectileHitEvent e){}
     public void onUseAtEntity(PlayerInteractAtEntityEvent e){}
+
+    public void whenPlayerIsTouchedByParticle(Player player){}
 
 }

@@ -1,4 +1,4 @@
-package fr.yanis.superbecorpweapons;
+package fr.yanis.superbecorpweapons.item;
 
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;

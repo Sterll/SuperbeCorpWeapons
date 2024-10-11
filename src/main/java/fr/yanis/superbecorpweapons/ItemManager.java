@@ -1,10 +1,11 @@
 package fr.yanis.superbecorpweapons;
 
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
-public record ItemManager(Item item) {
+public record ItemManager(@NotNull Item item) {
 
     private static HashMap<ItemStack, ItemManager> items;
 

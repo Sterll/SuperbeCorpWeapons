@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -17,13 +18,13 @@ public class ParticleLib {
     public static void spawnDome(Location location, Color color, double maxRadius, Item item) {
         new BukkitRunnable() {
             double radius = 0;
+            Collection<? extends Entity> entities = location.getWorld().getNearbyEntities(location, 15, 15, 15);
             @Override
             public void run() {
                 if (radius > maxRadius) {
                     this.cancel();
                     return;
                 }
-                Collection<? extends Player> players = Bukkit.getOnlinePlayers();
                 for (double y = 0; y <= radius; y += 0.2) {
                     double currentRadius = Math.sqrt(radius * radius - y * y);
                     for (int i = 0; i < 360; i += 10) {
@@ -36,13 +37,13 @@ public class ParticleLib {
                                 .location(location)
                                 .count(2)
                                 .spawn();
-                        for (Player player : players) {
-                            if (player.getWorld().equals(location.getWorld())
-                                    && player.getLocation().distanceSquared(location) <= 0.25) {
-                                item.whenPlayerIsTouchedByParticle(player);
+                        for (Entity entity : entities) {
+                            if (entity.getWorld().equals(location.getWorld())
+                                    && entity.getLocation().distanceSquared(location) <= 0.25) {
+                                item.whenEntityIsTouchedByParticle(entity);
                             }
                         }
-                        location.subtract(x, y, z);
+                        location.subtract(x, 0, z);
                     }
                 }
                 radius += 0.2;
@@ -53,13 +54,13 @@ public class ParticleLib {
     public static void spawnCircleAt(Location location, Color color, Item item){
         new BukkitRunnable() {
             double radius = 0;
+            Collection<? extends Entity> entities = location.getWorld().getNearbyEntities(location, 15, 15, 15);
             @Override
             public void run() {
                 if (radius > 5) {
                     this.cancel();
                     return;
                 }
-                Collection<? extends Player> players = Bukkit.getOnlinePlayers();
                 for (int i = 0; i < 360; i += 10) {
                     double angle = Math.toRadians(i);
                     double x = radius * Math.cos(angle);
@@ -70,10 +71,10 @@ public class ParticleLib {
                             .location(location)
                             .count(2)
                             .spawn();
-                    for (Player player : players) {
-                        if (player.getWorld().equals(location.getWorld())
-                                && player.getLocation().distanceSquared(location) <= 0.25) {
-                            item.whenPlayerIsTouchedByParticle(player);
+                    for (Entity entity : entities) {
+                        if (entity.getWorld().equals(location.getWorld())
+                                && entity.getLocation().distanceSquared(location) <= 0.25) {
+                            item.whenEntityIsTouchedByParticle(entity);
                         }
                     }
                     location.subtract(x, 0, z);

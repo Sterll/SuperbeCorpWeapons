@@ -2,3 +2,8 @@ name: SuperbeCorpWeapons
 version: '1.0-SNAPSHOT'
 main: fr.yanis.superbecorpweapons.SCWMain
 api-version: '1.21'
+commands:
+  weapons:
+    aliases: [w, weapon]
+    description: Give a weapon
+    usage: /weapons

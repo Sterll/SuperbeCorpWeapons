@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'fr.yanis'
@@ -38,6 +39,10 @@ tasks.withType(JavaCompile).configureEach {
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release.set(targetJavaVersion)
     }
+}
+
+shadowJar {
+    archiveClassifier.set('')  // Cela permet de créer un seul JAR sans suffixe "-all"
 }
 
 processResources {

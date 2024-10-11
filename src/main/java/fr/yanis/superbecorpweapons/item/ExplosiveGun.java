@@ -1,12 +1,22 @@
 package fr.yanis.superbecorpweapons.item;
 
+import com.destroystokyo.paper.ParticleBuilder;
+import fr.yanis.superbecorpweapons.SCWMain;
 import fr.yanis.superbecorpweapons.item.management.Item;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
+import fr.yanis.superbecorpweapons.utils.ParticleLib;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
+import org.bukkit.*;
+import org.bukkit.entity.Chicken;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class ExplosiveGun extends Item {
     @Override
@@ -34,6 +44,34 @@ public class ExplosiveGun extends Item {
 
     @Override
     public void onUse(PlayerInteractEvent e) {
+        Entity entity = e.getPlayer().getWorld().spawn(e.getPlayer().getLocation(), Chicken.class);
+        entity.customName(Component.text("§cBooooooom dans §b5 §csecondes"));
+        entity.setCustomNameVisible(true);
+        entity.setInvulnerable(true);
+        entity.setGlowing(true);
+        entity.setVelocity(e.getPlayer().getLocation().getDirection().multiply(2));
+
+        new BukkitRunnable(){
+            int time = 5;
+            @Override
+            public void run() {
+                entity.customName(Component.text("§cBooooooom dans §b" + time + " §csecondes"));
+                if(time == 0){
+                    Location location = entity.getLocation();
+                    entity.remove();
+                    e.getPlayer().getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+                    location.getNearbyEntities(5,5,5).forEach(entity1 -> {
+                        if(entity1 instanceof LivingEntity){
+                            ((LivingEntity) entity1).addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 5, 1));
+                        }
+                    });
+                    ParticleLib.spawnDome(location, Color.fromRGB(0, 255, 0), 5);
+                    cancel();
+                    return;
+                }
+                time--;
+            }
+        }.runTaskTimer(SCWMain.getInstance(), 0L, 20L);
 
     }
 

@@ -4,6 +4,7 @@ import fr.yanis.superbecorpweapons.item.management.Item;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -33,6 +34,11 @@ public class LaserGun extends Item {
 
     @Override
     public void onUse(PlayerInteractEvent e) {
+
+    }
+
+    @Override
+    public void onProjectileHit(ProjectileHitEvent e) {
 
     }
 }

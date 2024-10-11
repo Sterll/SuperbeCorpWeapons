@@ -1,5 +1,6 @@
 package fr.yanis.superbecorpweapons.command;
 
+import fr.yanis.superbecorpweapons.gui.ItemListGui;
 import fr.yanis.superbecorpweapons.item.management.ItemManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,6 +22,8 @@ public class CommandWeapons implements CommandExecutor, TabCompleter {
         Player player = (Player) sender;
         switch (args.length){
             case 0:
+                ItemListGui.inventory.open(player);
+                return true;
             case 1:
                 if(args[0].equalsIgnoreCase("all")){
                     for (ItemStack itemStack : ItemManager.getItems().keySet()) {

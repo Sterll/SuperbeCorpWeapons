@@ -1,7 +1,7 @@
 package fr.yanis.superbecorpweapons;
 
 import fr.yanis.superbecorpweapons.command.CommandWeapons;
-import fr.yanis.superbecorpweapons.item.ItemsEvents;
+import fr.yanis.superbecorpweapons.item.management.ItemsEvents;
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import org.bukkit.plugin.java.JavaPlugin;
 

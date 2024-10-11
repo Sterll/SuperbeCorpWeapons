@@ -1,6 +1,8 @@
 package fr.yanis.superbecorpweapons;
 
 import fr.yanis.superbecorpweapons.command.CommandWeapons;
+import fr.yanis.superbecorpweapons.item.*;
+import fr.yanis.superbecorpweapons.item.management.ItemManager;
 import fr.yanis.superbecorpweapons.item.management.ItemsEvents;
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,6 +20,12 @@ public final class SCWMain extends JavaPlugin {
 
         inventoryManager = new InventoryManager(this);
         inventoryManager.invoke();
+
+        new ItemManager(new MachineGun());
+        new ItemManager(new ExplosiveGun());
+        new ItemManager(new PoseidonsTrident());
+        new ItemManager(new SummonersStaff());
+        new ItemManager(new LaserGun());
 
         instance = this;
     }

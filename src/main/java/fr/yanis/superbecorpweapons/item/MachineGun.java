@@ -1,14 +1,17 @@
 package fr.yanis.superbecorpweapons.item;
 
+import com.destroystokyo.paper.ParticleBuilder;
+import fr.yanis.superbecorpweapons.SCWMain;
 import fr.yanis.superbecorpweapons.item.management.Item;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Arrow;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class MachineGun extends Item {
@@ -37,7 +40,6 @@ public class MachineGun extends Item {
 
     @Override
     public void onUse(PlayerInteractEvent e) {
-        e.getPlayer().sendMessage("§bOUI ! ");
         int amountOfShoot = 5;
         double spread = 0.1;
 
@@ -52,7 +54,34 @@ public class MachineGun extends Item {
             );
             arrow.setDamage(1.0);
             arrow.setCritical(false);
+            arrow.setPickupStatus(Arrow.PickupStatus.DISALLOWED);
+            arrow.setVisibleByDefault(false);
+            arrow.customName(Component.text("machine_gun"));
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (arrow.isDead() || !arrow.isValid()) {
+                        this.cancel();
+                        return;
+                    }
+                    new ParticleBuilder(Particle.DUST)
+                            .data(new Particle.DustOptions(Color.fromRGB(178, 70, 70), 1))
+                            .count(2)
+                            .offset(0.1, 0.1, 0.1)
+                            .extra(0.01)
+                            .location(arrow.getLocation())
+                            .spawn().particle();
+                }
+            }.runTaskTimer(SCWMain.getInstance(), 0L, 0L);
+        }
+    }
 
+    @Override
+    public void onProjectileHit(ProjectileHitEvent e) {
+        if(!(e.getEntity() instanceof Arrow)) return;
+        Arrow arrow = (Arrow) e.getEntity();
+        if(arrow.customName().equals(Component.text("machine_gun"))){
+            arrow.remove();
         }
     }
 }

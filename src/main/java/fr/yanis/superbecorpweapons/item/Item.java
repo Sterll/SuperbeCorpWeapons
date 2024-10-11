@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 public abstract class Item {
 
+    public abstract String getKey();
     public abstract String getName();
     public abstract String getDescription();
     public abstract ItemStack getItem();

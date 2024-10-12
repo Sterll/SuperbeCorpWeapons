@@ -2,6 +2,7 @@ package fr.yanis.superbecorpweapons.item.management;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -22,6 +23,7 @@ public abstract class Item {
     public void onAttackEntity(EntityDamageByEntityEvent e){}
 
     public void onMove(PlayerMoveEvent e){}
+    public void onCombust(EntityCombustEvent e){}
 
     public void whenEntityIsTouchedByParticle(Entity entity){}
 

@@ -3,6 +3,7 @@ package fr.yanis.superbecorpweapons.item.management;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -52,6 +53,13 @@ public class ItemsEvents implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         for (ItemManager value : ItemManager.getItems().values()) {
             value.item().onMove(event);
+        }
+    }
+
+    @EventHandler
+    public void onEntityCombust(EntityCombustEvent event) {
+        for (ItemManager value : ItemManager.getItems().values()) {
+            value.item().onCombust(event);
         }
     }
 }

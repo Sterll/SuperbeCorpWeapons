@@ -7,6 +7,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 public class ItemsEvents implements Listener {
 
@@ -44,6 +45,13 @@ public class ItemsEvents implements Listener {
             if(value.item().getItem().isSimilar(((Player) event.getDamager()).getActiveItem())){
                 value.item().onAttackEntity(event);
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        for (ItemManager value : ItemManager.getItems().values()) {
+            value.item().onMove(event);
         }
     }
 }

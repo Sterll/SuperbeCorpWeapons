@@ -6,6 +6,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
 public abstract class Item {
@@ -19,6 +20,8 @@ public abstract class Item {
     public void onProjectileHit(ProjectileHitEvent e){}
     public void onUseAtEntity(PlayerInteractAtEntityEvent e){}
     public void onAttackEntity(EntityDamageByEntityEvent e){}
+
+    public void onMove(PlayerMoveEvent e){}
 
     public void whenEntityIsTouchedByParticle(Entity entity){}
 

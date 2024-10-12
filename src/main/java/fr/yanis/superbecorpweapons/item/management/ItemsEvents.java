@@ -43,9 +43,7 @@ public class ItemsEvents implements Listener {
     public void onEntityDamageByPlayer(EntityDamageByEntityEvent event) {
         if(!(event.getDamager() instanceof Player)) return;
         for (ItemManager value : ItemManager.getItems().values()) {
-            if(value.item().getItem().isSimilar(((Player) event.getDamager()).getActiveItem())){
-                value.item().onAttackEntity(event);
-            }
+            value.item().onAttackEntity(event);
         }
     }
 

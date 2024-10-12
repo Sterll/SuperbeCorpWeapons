@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Collection;
@@ -83,6 +84,36 @@ public class ParticleLib {
                 radius += 0.2;
             }
         }.runTaskTimer(SCWMain.getInstance(), 0L, 0L);
+    }
+
+    public static void spawnRandomParticles(Zombie zombie, Color color) {
+        new BukkitRunnable() {
+            int count = 0;
+
+            @Override
+            public void run() {
+                if (count > 20 || !zombie.isValid()) {
+                    this.cancel();
+                    return;
+                }
+
+                Location location = zombie.getLocation();
+
+                for (int i = 0; i < 15; i++) {
+                    double offsetX = (Math.random() - 0.5) * 1.5;
+                    double offsetY = Math.random() * 1.5;
+                    double offsetZ = (Math.random() - 0.5) * 1.5;
+
+                    new ParticleBuilder(Particle.DUST)
+                            .data(new Particle.DustOptions(color, 1))
+                            .location(location)
+                            .count(2)
+                            .offset(offsetX, offsetY, offsetZ)
+                            .spawn();
+                }
+                count++;
+            }
+        }.runTaskTimer(SCWMain.getInstance(), 0L, 2L); // Exécute toutes les 2 ticks
     }
 
 }

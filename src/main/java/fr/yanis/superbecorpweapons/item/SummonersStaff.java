@@ -3,9 +3,11 @@ package fr.yanis.superbecorpweapons.item;
 import fr.yanis.superbecorpweapons.SCWMain;
 import fr.yanis.superbecorpweapons.item.management.Item;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
+import fr.yanis.superbecorpweapons.utils.ParticleLib;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -83,6 +85,7 @@ public class SummonersStaff extends Item {
         zombie.setAdult();
         zombie.setAI(true);
         zombie.getEquipment().setHelmet(new ItemStack(Material.ZOMBIE_HEAD));
+        ParticleLib.spawnRandomParticles(zombie, Color.AQUA);
         addZombie(e.getPlayer(), zombie);
         moveZombie(zombie, e.getPlayer());
     }

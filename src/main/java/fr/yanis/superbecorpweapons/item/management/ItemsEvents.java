@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -55,9 +56,9 @@ public class ItemsEvents implements Listener {
     }
 
     @EventHandler
-    public void onEntityCombust(EntityCombustEvent event) {
+    public void onEntityDeath(EntityDeathEvent event) {
         for (ItemManager value : ItemManager.getItems().values()) {
-            value.item().onCombust(event);
+            value.item().onEntityDeath(event);
         }
     }
 }

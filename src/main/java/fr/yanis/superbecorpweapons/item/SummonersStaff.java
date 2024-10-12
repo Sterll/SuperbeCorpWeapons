@@ -4,6 +4,7 @@ import fr.yanis.superbecorpweapons.SCWMain;
 import fr.yanis.superbecorpweapons.item.management.Item;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -79,6 +80,7 @@ public class SummonersStaff extends Item {
         zombie.setTarget(null);
         zombie.setAdult();
         zombie.setAI(true);
+        zombie.getEquipment().setHelmet(new ItemStack(Material.ZOMBIE_HEAD));
         addZombie(e.getPlayer(), zombie);
         moveZombie(zombie, e.getPlayer());
     }
@@ -98,6 +100,7 @@ public class SummonersStaff extends Item {
         if(e.getEntity() instanceof Zombie) {
             if(e.getEntity().customName() != null) return;
             String name = e.getEntity().customName().toString();
+            Bukkit.broadcast(Component.text(name));
             if (name.contains("Zombie de")) {
                 e.setCancelled(true);
             }
@@ -125,7 +128,7 @@ public class SummonersStaff extends Item {
                     this.cancel();
                     return;
                 }
-                if(zombie.getTarget() != player) return;
+                if(zombie.getTarget() != player && zombie.getTarget() != null) return;
 
                 Location playerLocation = player.getLocation();
                 double distance = zombie.getLocation().distance(playerLocation);

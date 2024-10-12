@@ -80,26 +80,7 @@ public class SummonersStaff extends Item {
         zombie.setAdult();
         zombie.setAI(true);
         addZombie(e.getPlayer(), zombie);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (!zombie.isValid() || !e.getPlayer().isOnline()) {
-                    this.cancel();
-                    return;
-                }
-
-                Location playerLocation = player.getLocation();
-                double distance = zombie.getLocation().distance(playerLocation);
-
-                if (distance > 4) {
-                    zombie.setAI(true);
-                    zombie.setTarget(e.getPlayer());
-                } else {
-                    zombie.setAI(false);
-                    zombie.setTarget(null);
-                }
-            }
-        }.runTaskTimer(SCWMain.getInstance(), 0L, 10L);
+        moveZombie(zombie, e.getPlayer());
     }
 
     @Override
@@ -107,6 +88,7 @@ public class SummonersStaff extends Item {
         if(zombies.containsKey(e.getDamager())) {
             for(Zombie zombie : zombies.get(e.getDamager())) {
                 zombie.setTarget((LivingEntity) e.getEntity());
+                zombie.setAI(true);
             }
         }
     }
@@ -133,5 +115,29 @@ public class SummonersStaff extends Item {
         if (zombies.containsKey(player)) {
             zombies.get(player).remove(zombie);
         }
+    }
+
+    public void moveZombie(Zombie zombie, Player player){
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!zombie.isValid() || !player.isOnline()) {
+                    this.cancel();
+                    return;
+                }
+                if(zombie.getTarget() != player) return;
+
+                Location playerLocation = player.getLocation();
+                double distance = zombie.getLocation().distance(playerLocation);
+
+                if (distance > 4) {
+                    zombie.setAI(true);
+                    zombie.setTarget(player);
+                } else {
+                    zombie.setAI(false);
+                    zombie.setTarget(null);
+                }
+            }
+        }.runTaskTimer(SCWMain.getInstance(), 0L, 10L);
     }
 }

@@ -4,6 +4,7 @@ import fr.yanis.superbecorpweapons.SCWMain;
 import fr.yanis.superbecorpweapons.item.management.Item;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -87,10 +89,31 @@ public class SummonersStaff extends Item {
 
     @Override
     public void onAttackEntity(EntityDamageByEntityEvent e) {
-        if(zombies.containsKey(e.getDamager())) {
-            for(Zombie zombie : zombies.get(e.getDamager())) {
+        if(!(e.getDamager() instanceof Player)) return;
+        if(zombies.containsKey((Player) e.getDamager())) {
+            Bukkit.broadcast(Component.text("§cZombie attaque !"));
+            for(Zombie zombie : zombies.get((Player) e.getDamager())) {
                 zombie.setTarget((LivingEntity) e.getEntity());
                 zombie.setAI(true);
+            }
+        }
+    }
+
+    @Override
+    public void onEntityDeath(EntityDeathEvent e) {
+        if(e.getEntity() instanceof Zombie) {
+            for(Player player : zombies.keySet()) {
+                if(zombies.get(player).contains((Zombie) e.getEntity())) {
+                    removeZombie(player, (Zombie) e.getEntity());
+                    return;
+                }
+            }
+        }
+        for (Player player : zombies.keySet()) {
+            for (Zombie zombie : zombies.get(player)) {
+                if (zombie.getTarget() == e.getEntity()) {
+                    zombie.setTarget(null);
+                }
             }
         }
     }
@@ -112,6 +135,8 @@ public class SummonersStaff extends Item {
         new BukkitRunnable() {
             @Override
             public void run() {
+                TextComponent tc = zombie.getTarget() == null ? Component.text("null") : Component.text(zombie.getTarget().toString());
+                Bukkit.broadcast(tc);
                 if (!zombie.isValid() || !player.isOnline()) {
                     this.cancel();
                     return;

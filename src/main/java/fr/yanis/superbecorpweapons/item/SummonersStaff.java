@@ -95,18 +95,6 @@ public class SummonersStaff extends Item {
         }
     }
 
-    @Override
-    public void onCombust(EntityCombustEvent e) {
-        if(e.getEntity() instanceof Zombie) {
-            if(e.getEntity().customName() != null) return;
-            String name = e.getEntity().customName().toString();
-            Bukkit.broadcast(Component.text(name));
-            if (name.contains("Zombie de")) {
-                e.setCancelled(true);
-            }
-        }
-    }
-
     public void addZombie(Player player, Zombie zombie) {
         if (!zombies.containsKey(player)) {
             zombies.put(player, new ArrayList<>());

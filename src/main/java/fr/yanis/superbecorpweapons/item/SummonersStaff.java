@@ -55,6 +55,11 @@ public class SummonersStaff extends Item {
     }
 
     @Override
+    public int getCooldown() {
+        return 5;
+    }
+
+    @Override
     public void onUse(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         Location[] possibleLocations = {

@@ -43,6 +43,11 @@ public class ExplosiveGun extends Item {
     }
 
     @Override
+    public int getCooldown() {
+        return 5;
+    }
+
+    @Override
     public void onUse(PlayerInteractEvent e) {
         Chicken entity = e.getPlayer().getWorld().spawn(e.getPlayer().getLocation(), Chicken.class);
         entity.customName(Component.text("§cBooooooom dans §b5 §csecondes"));

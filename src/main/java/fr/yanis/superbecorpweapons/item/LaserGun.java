@@ -40,6 +40,11 @@ public class LaserGun extends Item {
     }
 
     @Override
+    public int getCooldown() {
+        return 2;
+    }
+
+    @Override
     public void onUse(PlayerInteractEvent e) {
         createLaser(e.getPlayer().getEyeLocation(), e.getPlayer().getLocation().getDirection(), e.getPlayer().getWorld(), 10, 50);
     }

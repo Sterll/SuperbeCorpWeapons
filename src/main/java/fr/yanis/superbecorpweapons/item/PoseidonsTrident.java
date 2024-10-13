@@ -46,6 +46,11 @@ public class PoseidonsTrident extends Item {
     }
 
     @Override
+    public int getCooldown() {
+        return 10;
+    }
+
+    @Override
     public void onUse(PlayerInteractEvent e) {
         ParticleLib.spawnWaterWaves(e.getPlayer(), this);
         e.getPlayer().playSound(e.getPlayer().getLocation(), "minecraft:custom.trident_sound", 1.0f, 1.0f);

@@ -39,6 +39,11 @@ public class MachineGun extends Item {
     }
 
     @Override
+    public int getCooldown() {
+        return 0;
+    }
+
+    @Override
     public void onUse(PlayerInteractEvent e) {
         int amountOfShoot = 5;
         double spread = 0.1;

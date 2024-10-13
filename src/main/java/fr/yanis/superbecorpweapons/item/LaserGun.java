@@ -51,16 +51,14 @@ public class LaserGun extends Item {
 
     public void createLaser(Location origin, Vector direction, World world, int maxReflections, double distance) {
         Location currentPos = origin.clone();
-        Vector currentDirection = direction.clone().normalize(); // Initial direction of the laser
+        Vector currentDirection = direction.clone().normalize();
         int reflections = 0;
         double traveledDistance = 0;
 
         while (reflections <= maxReflections && traveledDistance < distance) {
-            // Avance le laser sans modifier currentDirection lui-même
             currentPos.add(currentDirection.clone().multiply(0.1));
             traveledDistance += 0.1;
 
-            // Spawn particle at the current location
             new ParticleBuilder(Particle.DUST)
                     .data(new Particle.DustOptions(Color.RED, 1))
                     .location(currentPos)
@@ -70,11 +68,10 @@ public class LaserGun extends Item {
             currentPos.getNearbyEntities(0.5, 0.5, 0.5).forEach(this::whenEntityIsTouchedByParticle);
 
             Block hitBlock = currentPos.getBlock();
-            if (!hitBlock.isPassable()) {  // If block is not air or a passable block
-                // Calculate reflection
+            if (!hitBlock.isPassable()) {
                 BlockFace hitFace = getHitBlockFace(currentPos, hitBlock);
-                if (hitFace != BlockFace.SELF) { // Ignore invalid faces
-                    Vector normal = getBlockNormal(hitFace);  // Get block face normal
+                if (hitFace != BlockFace.SELF) {
+                    Vector normal = getBlockNormal(hitFace);
                     currentDirection = calculateReflection(currentDirection, normal);
                     reflections++;
                 }
@@ -82,30 +79,24 @@ public class LaserGun extends Item {
         }
     }
 
-    // Calculate reflection using the block's normal vector
     private Vector calculateReflection(Vector incoming, Vector normal) {
-        // Reflection formula: R = D - 2 * (D · N) * N
         return incoming.subtract(normal.multiply(2 * incoming.dot(normal))).normalize();
     }
 
-    // Get the normal vector based on the BlockFace
     private Vector getBlockNormal(BlockFace face) {
         switch (face) {
-            case NORTH: return new Vector(0, 0, -1);  // Negative Z
-            case SOUTH: return new Vector(0, 0, 1);   // Positive Z
-            case WEST:  return new Vector(-1, 0, 0);  // Negative X
-            case EAST:  return new Vector(1, 0, 0);   // Positive X
-            case UP:    return new Vector(0, 1, 0);   // Positive Y
-            case DOWN:  return new Vector(0, -1, 0);  // Negative Y
-            default:    return new Vector(0, 0, 0);   // Default case, should never happen
+            case NORTH: return new Vector(0, 0, -1);
+            case SOUTH: return new Vector(0, 0, 1);
+            case WEST:  return new Vector(-1, 0, 0);
+            case EAST:  return new Vector(1, 0, 0);
+            case UP:    return new Vector(0, 1, 0);
+            case DOWN:  return new Vector(0, -1, 0);
+            default:    return new Vector(0, 0, 0);
         }
     }
 
-    // Approximate a method to get the hit BlockFace based on the player's current position and block
     private BlockFace getHitBlockFace(Location location, Block block) {
-        // This is a simple version of the method that can be refined:
-        // You could use Spigot's ray tracing API to get a more accurate hit result.
-        Location blockCenter = block.getLocation().add(0.5, 0.5, 0.5);  // Center of the block
+        Location blockCenter = block.getLocation().add(0.5, 0.5, 0.5);
         Vector relative = location.toVector().subtract(blockCenter.toVector());
 
         double absX = Math.abs(relative.getX());
@@ -119,10 +110,5 @@ public class LaserGun extends Item {
         } else {
             return relative.getZ() > 0 ? BlockFace.SOUTH : BlockFace.NORTH;
         }
-    }
-
-    private BlockFace getHitBlockFaceV2(Location location, Block block) {
-        RayTraceResult result = block.getWorld().rayTraceBlocks(location, location.getDirection(), 1.0);
-        return result != null ? result.getHitBlockFace() : BlockFace.SELF;
     }
 }

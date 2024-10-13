@@ -114,35 +114,31 @@ public class ParticleLib {
                 }
                 count++;
             }
-        }.runTaskTimer(SCWMain.getInstance(), 0L, 2L); // Exécute toutes les 2 ticks
+        }.runTaskTimer(SCWMain.getInstance(), 0L, 2L);
     }
 
     public static void spawnWaterWaves(Player player, Item item) {
         Collection<? extends Entity> entities = player.getWorld().getNearbyEntities(player.getLocation(), 15, 15, 15);
 
-        // On clone la position du joueur et on applique un décalage initial de 2 blocs en direction de son regard
         Location startLocation = player.getLocation().clone().add(player.getLocation().getDirection().normalize().multiply(5));
-        Color lightBlue = Color.fromRGB(173, 216, 230); // Bleu clair
-        Color darkBlue = Color.fromRGB(0, 0, 139);      // Bleu foncé
-        int waveWidth = 30; // Largeur de la vague en blocs
+        Color lightBlue = Color.fromRGB(173, 216, 230);
+        Color darkBlue = Color.fromRGB(0, 0, 139);
+        int waveWidth = 30;
 
-        // Direction dans laquelle le joueur regarde
         Vector direction = player.getLocation().getDirection().normalize();
-        Vector perpendicular = new Vector(-direction.getZ(), 0, direction.getX()).normalize(); // Perpendiculaire à la direction
+        Vector perpendicular = new Vector(-direction.getZ(), 0, direction.getX()).normalize();
 
         new BukkitRunnable() {
-            double waveOffset = 0; // Offset de progression de la vague
+            double waveOffset = 0;
             double heightOffset = 0;
             boolean goingUp = true;
 
             @Override
             public void run() {
-                if (waveOffset > 10) { // Limite la longueur de la vague
+                if (waveOffset > 10) {
                     this.cancel();
                     return;
                 }
-
-                // Calcule la position verticale en fonction de l’oscillation
                 if (goingUp) {
                     heightOffset += 0.1;
                     if (heightOffset >= 0.5) goingUp = false;
@@ -151,13 +147,9 @@ public class ParticleLib {
                     if (heightOffset <= 0) goingUp = true;
                 }
 
-                // Crée des rangées de particules pour chaque couleur sur la largeur de la vague
                 for (int widthOffset = -waveWidth / 2; widthOffset <= waveWidth / 2; widthOffset++) {
-                    for (int i = 0; i < 10; i++) { // Longueur de la vague
-                        // Décalage dans la direction du joueur pour contrôler l'avancement
+                    for (int i = 0; i < 10; i++) {
                         Vector offsetDirection = direction.clone().multiply(waveOffset - i * 0.3);
-
-                        // Décalage en largeur de la vague (perpendiculaire à la direction du joueur)
                         Vector offsetWidth = perpendicular.clone().multiply(widthOffset * 0.3);
 
                         Location particleLocation = startLocation.clone().add(offsetDirection).add(offsetWidth).add(0, heightOffset, 0);
@@ -174,8 +166,8 @@ public class ParticleLib {
                                 item.whenEntityIsTouchedByParticle(entity);
                             }
                         }
-                        // Crée une particule bleu foncé pour la deuxième ligne
-                        particleLocation.add(perpendicular.clone().multiply(0.3)); // Décalage supplémentaire pour créer la double ligne
+
+                        particleLocation.add(perpendicular.clone().multiply(0.3));
                         new ParticleBuilder(Particle.DUST)
                                 .data(new Particle.DustOptions(darkBlue, 1))
                                 .location(particleLocation)
@@ -189,27 +181,27 @@ public class ParticleLib {
                         }
                     }
                 }
-                waveOffset += 0.2; // Fait avancer la vague progressivement dans la direction du joueur
+                waveOffset += 0.2;
             }
-        }.runTaskTimer(SCWMain.getInstance(), 0L, 2L); // Exécution toutes les 2 ticks pour un mouvement fluide
+        }.runTaskTimer(SCWMain.getInstance(), 0L, 2L);
     }
 
     public static void spawnRotatingCircle(Entity entity, Color color) {
         new BukkitRunnable() {
-            double angle = 0; // Angle de rotation initial
-            int duration = 0; // Compteur pour arrêter l'animation après 3 secondes (60 ticks)
+            double angle = 0;
+            int duration = 0;
 
             @Override
             public void run() {
-                if (!entity.isValid() || duration > 50) { // Annule la tâche si l'entité n'est plus valide ou après 3 secondes
+                if (!entity.isValid() || duration > 50) {
                     this.cancel();
                     return;
                 }
 
-                Location center = entity.getLocation().add(0, 1, 0); // Centre du cercle, légèrement au-dessus du sol
-                double radius = 1.5; // Rayon ajusté pour être près de l'entité
+                Location center = entity.getLocation().add(0, 1, 0);
+                double radius = 1.5;
 
-                for (int i = 0; i < 360; i += 20) { // Particules espacées tous les 20 degrés pour plus de densité
+                for (int i = 0; i < 360; i += 20) {
                     double radianAngle = Math.toRadians(i + angle);
                     double x = radius * Math.cos(radianAngle);
                     double z = radius * Math.sin(radianAngle);
@@ -222,11 +214,11 @@ public class ParticleLib {
                             .spawn();
                 }
 
-                angle += 10; // Incrémente l'angle pour faire tourner le cercle
-                if (angle >= 360) angle = 0; // Réinitialise l'angle après une rotation complète
+                angle += 10;
+                if (angle >= 360) angle = 0;
 
-                duration++; // Incrémente le compteur de durée
+                duration++;
             }
-        }.runTaskTimer(SCWMain.getInstance(), 0L, 2L); // Exécution toutes les 2 ticks pour une rotation fluide
+        }.runTaskTimer(SCWMain.getInstance(), 0L, 2L);
     }
 }

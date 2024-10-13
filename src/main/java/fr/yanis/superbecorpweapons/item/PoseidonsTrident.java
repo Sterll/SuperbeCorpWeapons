@@ -15,7 +15,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+
 public class PoseidonsTrident extends Item {
+
+    private ArrayList<Entity> alreadyHit = new ArrayList<>();
+
     @Override
     public String getKey() {
         return "poseidon_trident";
@@ -47,10 +52,12 @@ public class PoseidonsTrident extends Item {
     @Override
     public void whenEntityIsTouchedByParticle(Entity entity) {
         ParticleLib.spawnRotatingCircle(entity, Color.BLUE);
+        alreadyHit.add(entity);
         new BukkitRunnable(){
             @Override
             public void run() {
                 entity.setVelocity(entity.getVelocity().setY(2));
+                alreadyHit.remove(entity);
             }
         }.runTaskLaterAsynchronously(SCWMain.getInstance(), 20 * 3);
     }

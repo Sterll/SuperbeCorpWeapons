@@ -41,12 +41,14 @@ public class PoseidonsTrident extends Item {
         return new ItemBuilder(Material.STICK)
                 .setName(Component.text(getName()))
                 .addLore(Component.text("§f")).addLore(Component.text(getDescription()))
+                .setCustomModelData(25)
                 .build();
     }
 
     @Override
     public void onUse(PlayerInteractEvent e) {
         ParticleLib.spawnWaterWaves(e.getPlayer(), this);
+        e.getPlayer().playSound(e.getPlayer().getLocation(), "minecraft:custom.trident_sound", 1.0f, 1.0f);
     }
 
     @Override

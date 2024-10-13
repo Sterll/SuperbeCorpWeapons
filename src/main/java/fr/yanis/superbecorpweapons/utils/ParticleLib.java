@@ -170,7 +170,7 @@ public class ParticleLib {
                                 .spawn();
                         for (Entity entity : entities) {
                             if (entity.getWorld().equals(particleLocation.getWorld())
-                                    && entity.getLocation().distanceSquared(particleLocation) <= 0.25) {
+                                    && entity.getLocation().distanceSquared(particleLocation) <= 0.75) {
                                 item.whenEntityIsTouchedByParticle(entity);
                             }
                         }
@@ -183,7 +183,7 @@ public class ParticleLib {
                                 .spawn();
                         for (Entity entity : entities) {
                             if (entity.getWorld().equals(particleLocation.getWorld())
-                                    && entity.getLocation().distanceSquared(particleLocation) <= 0.25) {
+                                    && entity.getLocation().distanceSquared(particleLocation) <= 0.75) {
                                 item.whenEntityIsTouchedByParticle(entity);
                             }
                         }

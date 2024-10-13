@@ -121,6 +121,16 @@ public class SummonersStaff extends Item {
         }
     }
 
+    @Override
+    public void onDisable() {
+        for (Player player : zombies.keySet()) {
+            for (Zombie zombie : zombies.get(player)) {
+                zombie.remove();
+                zombies.get(player).remove(zombie);
+            }
+        }
+    }
+
     public void addZombie(Player player, Zombie zombie) {
         if (!zombies.containsKey(player)) {
             zombies.put(player, new ArrayList<>());

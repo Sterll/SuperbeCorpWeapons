@@ -36,7 +36,7 @@ public final class SCWMain extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        ItemManager.getItems().values().forEach(itemManager -> itemManager.item().onDisable());
     }
 
     public static SCWMain getInstance() {

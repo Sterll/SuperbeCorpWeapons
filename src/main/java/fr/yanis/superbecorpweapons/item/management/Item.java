@@ -26,6 +26,8 @@ public abstract class Item {
     public void onMove(PlayerMoveEvent e){}
     public void onEntityDeath(EntityDeathEvent e){}
 
+    public void onDisable(){}
+
     public void whenEntityIsTouchedByParticle(Entity entity){}
 
 }

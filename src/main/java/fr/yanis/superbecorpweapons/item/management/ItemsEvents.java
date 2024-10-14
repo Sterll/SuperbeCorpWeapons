@@ -24,21 +24,12 @@ public class ItemsEvents implements Listener {
                 value.item().cooldown.putIfAbsent(event.getPlayer(), false);
                 if(!(value.item().cooldown.get(event.getPlayer()))){
                     value.item().onUse(event);
-                    value.item().cooldown.put(event.getPlayer(), true);
                     if(value.item().getCooldown() != 0){
-                        event.getPlayer().sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + value.item().getName() + " pendant " + value.item().getCooldown() + "secondes"));
-                        new BukkitRunnable(){
-                            int time = value.item().getCooldown();
-                            @Override
-                            public void run() {
-                                if(time == 0){
-                                    value.item().cooldown.put(event.getPlayer(), false);
-                                    event.getPlayer().sendMessage(Component.text("§aVous pouvez réutiliser l'item : " + value.item().getName()));
-                                    cancel();
-                                }
-                                time--;
-                            }
-                        }.runTaskTimer(SCWMain.getInstance(), 0, 20L);
+                        value.item().cooldown.put(event.getPlayer(), true);
+                        event.getPlayer().sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + value.item().getName() + " pendant " + value.item().getTimeLeft(event.getPlayer()) + "secondes"));
+                        CoolDownTask coolDownTask = new CoolDownTask(value, event);
+                        coolDownTask.runTaskTimerAsynchronously(SCWMain.getInstance(), 0, 20);
+                        value.item().cooldownTask.put(event.getPlayer(), coolDownTask);
                     }
                 } else {
                     event.getPlayer().sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + value.item().getName() + " pendant encore " + value.item().getCooldown() + "secondes"));

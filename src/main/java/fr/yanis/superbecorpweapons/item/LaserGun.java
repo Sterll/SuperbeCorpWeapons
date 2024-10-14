@@ -9,6 +9,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -46,7 +47,7 @@ public class LaserGun extends Item {
 
     @Override
     public void onUse(PlayerInteractEvent e) {
-        createLaser(e.getPlayer().getEyeLocation(), e.getPlayer().getLocation().getDirection(), e.getPlayer().getWorld(), 10, 50);
+        createLaser(e.getPlayer(), e.getPlayer().getEyeLocation(), e.getPlayer().getLocation().getDirection(), e.getPlayer().getWorld(), 10, 50);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class LaserGun extends Item {
         entity.getWorld().strikeLightning(entity.getLocation());
     }
 
-    public void createLaser(Location origin, Vector direction, World world, int maxReflections, double distance) {
+    public void createLaser(Player attacker, Location origin, Vector direction, World world, int maxReflections, double distance) {
         Location currentPos = origin.clone();
         Vector currentDirection = direction.clone().normalize();
         int reflections = 0;
@@ -70,7 +71,10 @@ public class LaserGun extends Item {
                     .count(1)
                     .extra(0)
                     .spawn();
-            currentPos.getNearbyEntities(0.5, 0.5, 0.5).forEach(this::whenEntityIsTouchedByParticle);
+            currentPos.getNearbyEntities(0.5, 0.5, 0.5).forEach(entity -> {
+                if (entity == attacker) return;
+                whenEntityIsTouchedByParticle(entity);
+            });
 
             Block hitBlock = currentPos.getBlock();
             if (!hitBlock.isPassable()) {

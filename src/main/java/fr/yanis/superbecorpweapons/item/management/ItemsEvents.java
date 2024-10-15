@@ -26,13 +26,13 @@ public class ItemsEvents implements Listener {
                     value.item().onUse(event);
                     if(value.item().getCooldown() != 0){
                         value.item().cooldown.put(event.getPlayer(), true);
-                        event.getPlayer().sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + value.item().getName() + " pendant " + value.item().getTimeLeft(event.getPlayer()) + "secondes"));
+                        event.getPlayer().sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + value.item().getName() + " pendant " + value.item().getCooldown() + "secondes"));
                         CoolDownTask coolDownTask = new CoolDownTask(value, event);
                         coolDownTask.runTaskTimerAsynchronously(SCWMain.getInstance(), 0, 20);
                         value.item().cooldownTask.put(event.getPlayer(), coolDownTask);
                     }
                 } else {
-                    event.getPlayer().sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + value.item().getName() + " pendant encore " + value.item().getCooldown() + "secondes"));
+                    event.getPlayer().sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + value.item().getName() + " pendant encore " + value.item().getTimeLeft(event.getPlayer()) + "secondes"));
                 }
             }
         }

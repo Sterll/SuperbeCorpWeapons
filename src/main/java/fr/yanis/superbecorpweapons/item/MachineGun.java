@@ -35,6 +35,7 @@ public class MachineGun extends Item {
         return new ItemBuilder(Material.STICK)
                 .setName(Component.text(getName()))
                 .addLore(Component.text("§f")).addLore(Component.text(getDescription()))
+                .setCustomModelData(27)
                 .build();
     }
 

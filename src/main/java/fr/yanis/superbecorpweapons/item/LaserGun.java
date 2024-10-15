@@ -49,6 +49,7 @@ public class LaserGun extends Item {
     @Override
     public void onUse(PlayerInteractEvent e) {
         createLaser(e.getPlayer(), e.getPlayer().getEyeLocation(), e.getPlayer().getLocation().getDirection(), e.getPlayer().getWorld(), 10, 50);
+        e.getPlayer().playSound(e.getPlayer().getLocation(), "minecraft:custom.raygun_sound", 1.0f, 1.0f);
     }
 
     @Override

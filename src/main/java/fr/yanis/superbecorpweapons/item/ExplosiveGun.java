@@ -66,7 +66,7 @@ public class ExplosiveGun extends Item {
                 if(time == 0){
                     Location location = entity.getLocation();
                     entity.remove();
-                    e.getPlayer().getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+                    e.getPlayer().playSound(location, "minecraft:custom.explosive_sound", 1.0f, 1.0f);
                     ParticleLib.spawnDome(location, Color.fromRGB(0,255,0), 5, ExplosiveGun.this);
                     cancel();
                     return;

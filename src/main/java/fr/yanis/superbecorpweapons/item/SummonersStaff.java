@@ -94,6 +94,7 @@ public class SummonersStaff extends Item {
         ParticleLib.spawnRandomParticles(zombie, Color.AQUA);
         addZombie(e.getPlayer(), zombie);
         moveZombie(zombie, e.getPlayer());
+        e.getPlayer().playSound(e.getPlayer().getLocation(), "minecraft:custom.summoners_sound", 1.0f, 1.0f);
     }
 
     @Override

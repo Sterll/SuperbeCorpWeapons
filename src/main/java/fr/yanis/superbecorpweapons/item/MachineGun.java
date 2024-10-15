@@ -79,6 +79,7 @@ public class MachineGun extends Item {
                             .spawn().particle();
                 }
             }.runTaskTimerAsynchronously(SCWMain.getInstance(), 0L, 0L);
+            e.getPlayer().playSound(e.getPlayer().getLocation(), "minecraft:custom.machine_gun_sound", 1.0f, 1.0f);
         }
     }
 

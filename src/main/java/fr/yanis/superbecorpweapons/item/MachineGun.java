@@ -2,6 +2,7 @@ package fr.yanis.superbecorpweapons.item;
 
 import com.destroystokyo.paper.ParticleBuilder;
 import fr.yanis.superbecorpweapons.SCWMain;
+import fr.yanis.superbecorpweapons.item.management.AItem;
 import fr.yanis.superbecorpweapons.item.management.Item;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import net.kyori.adventure.text.Component;
@@ -14,20 +15,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+@AItem(defaultName = "§6Mitraillette", defaultDescription = "§bC'est juste une mitraillette")
 public class MachineGun extends Item {
+
+    public MachineGun(){
+        super();
+    }
+
     @Override
     public String getKey() {
         return "machine_gun";
-    }
-
-    @Override
-    public String getName() {
-        return "§6Mitraillette";
-    }
-
-    @Override
-    public String getDescription() {
-        return "§bC'est juste une mitraillette";
     }
 
     @Override
@@ -37,11 +34,6 @@ public class MachineGun extends Item {
                 .addLore(Component.text("§f")).addLore(Component.text(getDescription()))
                 .setCustomModelData(27)
                 .build();
-    }
-
-    @Override
-    public int getCooldown() {
-        return 0;
     }
 
     @Override

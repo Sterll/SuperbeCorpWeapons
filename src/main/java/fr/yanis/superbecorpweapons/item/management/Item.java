@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,16 +15,30 @@ public abstract class Item {
     HashMap<Player, Boolean> cooldown = new HashMap<>();
     HashMap<Player, CoolDownTask> cooldownTask = new HashMap<>();
 
-    public abstract String getKey();
-    public abstract String getName();
-    public abstract String getDescription();
-    public abstract ItemStack getItem();
-    public abstract int getCooldown();
+    AItem annotation;
 
+    public Item(){
+       this.annotation = this.getClass().getAnnotation(AItem.class);
+    }
+
+    public abstract String getKey();
+    public String getName(){
+        return ItemManager.getSection(getKey()).getString("name");
+    }
+
+    public String getDescription(){
+        return ItemManager.getSection(getKey()).getString("description");o
+    }
+
+    public int getCooldown(){
+        return ItemManager.getSection(getKey()).getInt("cooldown");
+    }
+
+    public abstract ItemStack getItem();
     public abstract void onUse(PlayerInteractEvent e);
+
     public void onProjectileHit(ProjectileHitEvent e){}
     public void onAttackEntity(EntityDamageByEntityEvent e){}
-
     public void onEntityDeath(EntityDeathEvent e){}
 
     public void onDisable(){}
@@ -36,4 +49,7 @@ public abstract class Item {
 
     public void whenEntityIsTouchedByParticle(Entity entity){}
 
+    public AItem getAnnotation() {
+        return annotation;
+    }
 }

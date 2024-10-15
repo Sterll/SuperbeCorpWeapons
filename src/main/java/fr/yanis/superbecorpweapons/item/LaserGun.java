@@ -1,6 +1,7 @@
 package fr.yanis.superbecorpweapons.item;
 
 import com.destroystokyo.paper.ParticleBuilder;
+import fr.yanis.superbecorpweapons.item.management.AItem;
 import fr.yanis.superbecorpweapons.item.management.Item;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import fr.yanis.superbecorpweapons.utils.ParticleLib;
@@ -16,20 +17,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
+@AItem(defaultName = "§aPistolet Laser", defaultDescription = "§bC'est juste un pistolet laser qui rebondit", defaultCooldown = 2)
 public class LaserGun extends Item {
+
+    public LaserGun(){
+        super();
+    }
+
     @Override
     public String getKey() {
         return "lasergun";
-    }
-
-    @Override
-    public String getName() {
-        return "§aPistolet Laser";
-    }
-
-    @Override
-    public String getDescription() {
-        return "§bC'est juste un pistolet laser qui rebondit";
     }
 
     @Override
@@ -39,11 +36,6 @@ public class LaserGun extends Item {
                 .addLore(Component.text("§f")).addLore(Component.text(getDescription()))
                 .setCustomModelData(29)
                 .build();
-    }
-
-    @Override
-    public int getCooldown() {
-        return 2;
     }
 
     @Override

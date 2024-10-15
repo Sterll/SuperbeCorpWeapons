@@ -1,6 +1,7 @@
 package fr.yanis.superbecorpweapons.item;
 
 import fr.yanis.superbecorpweapons.SCWMain;
+import fr.yanis.superbecorpweapons.item.management.AItem;
 import fr.yanis.superbecorpweapons.item.management.Item;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import fr.yanis.superbecorpweapons.utils.ParticleLib;
@@ -18,7 +19,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 
+@AItem(defaultName = "§bTrident de Poséidon", defaultDescription = "§bUn trident qui vous permet de lancer une vague", defaultCooldown = 10)
 public class PoseidonsTrident extends Item {
+
+    public PoseidonsTrident(){
+        super();
+    }
 
     private ArrayList<Entity> alreadyHit = new ArrayList<>();
 
@@ -28,27 +34,12 @@ public class PoseidonsTrident extends Item {
     }
 
     @Override
-    public String getName() {
-        return "§bTrident de Poséidon";
-    }
-
-    @Override
-    public String getDescription() {
-        return "§bUn trident qui vous permet de lancer une vague";
-    }
-
-    @Override
     public ItemStack getItem() {
         return new ItemBuilder(Material.STICK)
                 .setName(Component.text(getName()))
                 .addLore(Component.text("§f")).addLore(Component.text(getDescription()))
                 .setCustomModelData(25)
                 .build();
-    }
-
-    @Override
-    public int getCooldown() {
-        return 10;
     }
 
     @Override

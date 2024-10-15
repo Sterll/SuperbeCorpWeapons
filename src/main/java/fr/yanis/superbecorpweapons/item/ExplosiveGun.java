@@ -2,6 +2,7 @@ package fr.yanis.superbecorpweapons.item;
 
 import com.destroystokyo.paper.ParticleBuilder;
 import fr.yanis.superbecorpweapons.SCWMain;
+import fr.yanis.superbecorpweapons.item.management.AItem;
 import fr.yanis.superbecorpweapons.item.management.Item;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import fr.yanis.superbecorpweapons.utils.ParticleLib;
@@ -18,20 +19,16 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+@AItem(defaultName = "§cPistolet Explosif", defaultDescription = "§bC'est juste un pistolet qui fait boum", defaultCooldown = 5)
 public class ExplosiveGun extends Item {
+
+    public ExplosiveGun(){
+        super();
+    }
+
     @Override
     public String getKey() {
         return "explosive_gun";
-    }
-
-    @Override
-    public String getName() {
-        return "§cPistolet Explosif";
-    }
-
-    @Override
-    public String getDescription() {
-        return "§bC'est juste un pistolet qui fait boum";
     }
 
     @Override
@@ -41,11 +38,6 @@ public class ExplosiveGun extends Item {
                 .addLore(Component.text("§f")).addLore(Component.text(getDescription()))
                 .setCustomModelData(28)
                 .build();
-    }
-
-    @Override
-    public int getCooldown() {
-        return 5;
     }
 
     @Override

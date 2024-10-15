@@ -1,6 +1,7 @@
 package fr.yanis.superbecorpweapons.item;
 
 import fr.yanis.superbecorpweapons.SCWMain;
+import fr.yanis.superbecorpweapons.item.management.AItem;
 import fr.yanis.superbecorpweapons.item.management.Item;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import fr.yanis.superbecorpweapons.utils.ParticleLib;
@@ -26,23 +27,18 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@AItem(defaultName = "§9Staff des invocateurs", defaultDescription = "§bC'est juste un baton qui invoque des mobs", defaultCooldown = 5)
 public class SummonersStaff extends Item {
 
     private HashMap<Player, ArrayList<Zombie>> zombies = new HashMap<>();
 
+    public SummonersStaff() {
+        super();
+    }
+
     @Override
     public String getKey() {
         return "summoners_staff";
-    }
-
-    @Override
-    public String getName() {
-        return "§9Staff des invocateurs";
-    }
-
-    @Override
-    public String getDescription() {
-        return "§bC'est juste un baton qui invoque des mobs";
     }
 
     @Override
@@ -52,11 +48,6 @@ public class SummonersStaff extends Item {
                 .addLore(Component.text("§f")).addLore(Component.text(getDescription()))
                 .setCustomModelData(26)
                 .build();
-    }
-
-    @Override
-    public int getCooldown() {
-        return 5;
     }
 
     @Override

@@ -49,8 +49,8 @@ public final class SCWMain extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e){
-        String url = "https://www.dropbox.com/scl/fi/duegi6bki01li72ehrtf0/SandBlocks.zip?rlkey=pdji8p9uykyu98hqpjm4hj03l&st=r9fa468w&dl=1";
-        String hash = "062a333d3424af3f4cd81e34d1122feed8b6e751";
+        String url = "https://www.dropbox.com/scl/fi/nv26llwpad70pj20goz0c/SandBlocks.zip?rlkey=lzkzubmk9v3arsfn550n8hi8b&st=959lzmxk&dl=1";
+        String hash = "9e4a09979b46d6a3ee992ea38231868496268da25fc6887e301a4df847c17467";
         e.getPlayer().setResourcePack(url, hash);
     }
 }

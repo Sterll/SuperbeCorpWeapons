@@ -64,13 +64,6 @@ public class ItemsEvents implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        for (ItemManager value : ItemManager.getItems().values()) {
-            value.item().onMove(event);
-        }
-    }
-
-    @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
         for (ItemManager value : ItemManager.getItems().values()) {
             value.item().onEntityDeath(event);

@@ -30,7 +30,6 @@ public abstract class Item {
     public void onUseAtEntity(PlayerInteractAtEntityEvent e){}
     public void onAttackEntity(EntityDamageByEntityEvent e){}
 
-    public void onMove(PlayerMoveEvent e){}
     public void onEntityDeath(EntityDeathEvent e){}
 
     public void onDisable(){}

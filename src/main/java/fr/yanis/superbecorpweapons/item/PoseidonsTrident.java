@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -58,6 +59,8 @@ public class PoseidonsTrident extends Item {
 
     @Override
     public void whenEntityIsTouchedByParticle(Entity entity) {
+        if(!(entity instanceof LivingEntity)) return;
+        if(alreadyHit.contains(entity)) return;
         ParticleLib.spawnRotatingCircle(entity, Color.BLUE);
         alreadyHit.add(entity);
         new BukkitRunnable(){

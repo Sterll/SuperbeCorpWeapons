@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public record ItemManager(@NotNull Item item) {
 
     private static HashMap<ItemStack, ItemManager> items = new HashMap<>();
 
+    @NotNull
     public static HashMap<ItemStack, ItemManager> getItems() {
         return items;
     }
@@ -24,13 +26,17 @@ public record ItemManager(@NotNull Item item) {
     public static File file = new File(SCWMain.getInstance().getDataFolder(), "items.yml");
     public static FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
+    @NotNull
     public static File getFile() { return file; }
+    @NotNull
     public static FileConfiguration getConfig() { return config; }
+    @Nullable
     public static ConfigurationSection getSection(String key) { return config.getConfigurationSection(key); }
 
+    @Nullable
     public ConfigurationSection getSection() { return getSection(item.getKey()); }
 
-    public static ItemManager getItem(ItemStack it) {
+    public static ItemManager getItem(@NotNull ItemStack it) {
         if(items.containsKey(it)) {
             return items.get(it);
         }

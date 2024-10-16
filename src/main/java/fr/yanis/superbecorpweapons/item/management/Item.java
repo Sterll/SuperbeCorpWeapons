@@ -7,6 +7,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -22,13 +23,16 @@ public abstract class Item {
     }
 
     public abstract String getKey();
+
+    @NotNull
     public String getName(){
-        if(ItemManager.getSection(getKey()) == null) return getAnnotation().defaultName();
+        if(ItemManager.getSection(getKey()) == null || ItemManager.getSection(getKey()).getString("name") == null) return getAnnotation().defaultName();
         else return ItemManager.getSection(getKey()).getString("name");
     }
 
+    @NotNull
     public String getDescription(){
-        if(ItemManager.getSection(getKey()) == null) return getAnnotation().defaultDescription();
+        if(ItemManager.getSection(getKey()) == null || ItemManager.getSection(getKey()).getString("description") == null) return getAnnotation().defaultDescription();
         else return ItemManager.getSection(getKey()).getString("description");
     }
 
@@ -38,20 +42,21 @@ public abstract class Item {
     }
 
     public abstract ItemStack getItem();
-    public abstract void onUse(PlayerInteractEvent e);
+    public abstract void onUse(@NotNull PlayerInteractEvent e);
 
-    public void onProjectileHit(ProjectileHitEvent e){}
-    public void onAttackEntity(EntityDamageByEntityEvent e){}
-    public void onEntityDeath(EntityDeathEvent e){}
+    public void onProjectileHit(@NotNull ProjectileHitEvent e){}
+    public void onAttackEntity(@NotNull EntityDamageByEntityEvent e){}
+    public void onEntityDeath(@NotNull EntityDeathEvent e){}
 
     public void onDisable(){}
 
-    public int getTimeLeft(Player player){
+    public int getTimeLeft(@NotNull Player player){
         return cooldownTask.get(player).getTime();
     }
 
-    public void whenEntityIsTouchedByParticle(Entity entity){}
+    public void whenEntityIsTouchedByParticle(@NotNull Entity entity){}
 
+    @NotNull
     public AItem getAnnotation() {
         return annotation;
     }

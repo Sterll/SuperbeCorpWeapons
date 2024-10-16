@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 @AItem(defaultName = "§6Mitraillette", defaultDescription = "§bC'est juste une mitraillette")
 public class MachineGun extends Item {
@@ -37,7 +38,7 @@ public class MachineGun extends Item {
     }
 
     @Override
-    public void onUse(PlayerInteractEvent e) {
+    public void onUse(@NotNull PlayerInteractEvent e) {
         int amountOfShoot = 5;
         double spread = 0.1;
 
@@ -76,7 +77,7 @@ public class MachineGun extends Item {
     }
 
     @Override
-    public void onProjectileHit(ProjectileHitEvent e) {
+    public void onProjectileHit(@NotNull ProjectileHitEvent e) {
         if(!(e.getEntity() instanceof Arrow)) return;
         Arrow arrow = (Arrow) e.getEntity();
         if(arrow.customName().equals(Component.text("machine_gun"))){

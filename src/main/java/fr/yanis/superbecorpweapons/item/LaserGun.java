@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 @AItem(defaultName = "§aPistolet Laser", defaultDescription = "§bC'est juste un pistolet laser qui rebondit", defaultCooldown = 2)
 public class LaserGun extends Item {
@@ -39,13 +40,13 @@ public class LaserGun extends Item {
     }
 
     @Override
-    public void onUse(PlayerInteractEvent e) {
+    public void onUse(@NotNull PlayerInteractEvent e) {
         createLaser(e.getPlayer(), e.getPlayer().getEyeLocation(), e.getPlayer().getLocation().getDirection(), e.getPlayer().getWorld(), 10, 50);
         e.getPlayer().playSound(e.getPlayer().getLocation(), "minecraft:custom.raygun_sound", 1.0f, 1.0f);
     }
 
     @Override
-    public void whenEntityIsTouchedByParticle(Entity entity) {
+    public void whenEntityIsTouchedByParticle(@NotNull Entity entity) {
         entity.getWorld().strikeLightning(entity.getLocation());
     }
 

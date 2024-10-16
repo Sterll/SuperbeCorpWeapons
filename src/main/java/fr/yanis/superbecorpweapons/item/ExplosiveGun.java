@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 @AItem(defaultName = "§cPistolet Explosif", defaultDescription = "§bC'est juste un pistolet qui fait boum", defaultCooldown = 5, intConfigValues = {
         @IntConfig(name = "chicken_time", value = 5),
@@ -47,7 +48,7 @@ public class ExplosiveGun extends Item {
     }
 
     @Override
-    public void onUse(PlayerInteractEvent e) {
+    public void onUse(@NotNull PlayerInteractEvent e) {
         Chicken entity = e.getPlayer().getWorld().spawn(e.getPlayer().getLocation(), Chicken.class);
         entity.customName(Component.text("§cBooooooom dans §b" + ItemManager.getItem(getItem()).getSection().getString("chicken_time") +  "§csecondes"));
         entity.setCustomNameVisible(true);
@@ -76,7 +77,7 @@ public class ExplosiveGun extends Item {
     }
 
     @Override
-    public void whenEntityIsTouchedByParticle(Entity entity) {
+    public void whenEntityIsTouchedByParticle(@NotNull Entity entity) {
         if(!(entity instanceof LivingEntity)) return;
         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * ItemManager.getItem(getItem()).getSection().getInt("poison_time"), 1));
     }

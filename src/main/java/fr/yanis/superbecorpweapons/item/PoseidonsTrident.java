@@ -16,6 +16,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -43,13 +44,13 @@ public class PoseidonsTrident extends Item {
     }
 
     @Override
-    public void onUse(PlayerInteractEvent e) {
+    public void onUse(@NotNull PlayerInteractEvent e) {
         ParticleLib.spawnWaterWaves(e.getPlayer(), this);
         e.getPlayer().playSound(e.getPlayer().getLocation(), "minecraft:custom.trident_sound", 1.0f, 1.0f);
     }
 
     @Override
-    public void whenEntityIsTouchedByParticle(Entity entity) {
+    public void whenEntityIsTouchedByParticle(@NotNull Entity entity) {
         if(!(entity instanceof LivingEntity)) return;
         if(alreadyHit.contains(entity)) return;
         ParticleLib.spawnRotatingCircle(entity, Color.BLUE);

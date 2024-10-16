@@ -3,6 +3,7 @@ package fr.yanis.superbecorpweapons.item.management;
 import net.kyori.adventure.text.Component;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 public class CoolDownTask extends BukkitRunnable {
 
@@ -10,7 +11,7 @@ public class CoolDownTask extends BukkitRunnable {
     public PlayerInteractEvent e;
     public int time;
 
-    public CoolDownTask(ItemManager value, PlayerInteractEvent e) {
+    public CoolDownTask(@NotNull ItemManager value, @NotNull PlayerInteractEvent e) {
         this.value = value;
         this.e = e;
         time = value.item().getCooldown();

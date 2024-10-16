@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 
 import java.util.Set;
@@ -40,16 +41,18 @@ public final class SCWMain extends JavaPlugin implements Listener {
         ItemManager.getItems().values().forEach(itemManager -> itemManager.item().onDisable());
     }
 
+    @NotNull
     public static SCWMain getInstance() {
         return instance;
     }
 
+    @NotNull
     public InventoryManager getInventoryManager() {
         return inventoryManager;
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent e){
+    public void onJoin(@NotNull PlayerJoinEvent e){
         String url = "https://www.dropbox.com/scl/fi/4l2x2ggiu6d6cldq8k6tt/SandBlocks.zip?rlkey=b30gapdtre3mgjkp1t77vxfk6&st=zv5j7644&dl=1";
         String hash = "fc07409081a6b1d98afab1be56a0664ae93c3baa";
         e.getPlayer().setResourcePack(url, hash);
@@ -63,10 +66,8 @@ public final class SCWMain extends JavaPlugin implements Listener {
                 if (Item.class.isAssignableFrom(clazz)) {
                     Class<?> specificScenarioClass = clazz;
                     Item itemInstance = (Item) specificScenarioClass.getDeclaredConstructor().newInstance();
-                    new ItemManager(itemInstance);
-                    if(ItemManager.getSection(itemInstance.getKey()) == null){
-                        ItemManager.getItem(itemInstance.getItem()).init();
-                    }
+                    ItemManager im = new ItemManager(itemInstance);
+                    if(im.getSection() == null) im.init();
                 }
             } catch (Exception e) {
                 getLogger().severe("Erreur lors du chargement de l'item " + clazz.getName());

@@ -6,8 +6,6 @@ import fr.yanis.superbecorpweapons.item.management.Item;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import fr.yanis.superbecorpweapons.utils.ParticleLib;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,14 +13,12 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
-import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,7 +47,7 @@ public class SummonersStaff extends Item {
     }
 
     @Override
-    public void onUse(PlayerInteractEvent e) {
+    public void onUse(@NotNull PlayerInteractEvent e) {
         Player player = e.getPlayer();
         Location[] possibleLocations = {
                 player.getLocation().add(4, 0, 0),  // Devant
@@ -89,7 +85,7 @@ public class SummonersStaff extends Item {
     }
 
     @Override
-    public void onAttackEntity(EntityDamageByEntityEvent e) {
+    public void onAttackEntity(@NotNull EntityDamageByEntityEvent e) {
         if(!(e.getDamager() instanceof Player)) return;
         if(zombies.containsKey((Player) e.getDamager())) {
             for(Zombie zombie : zombies.get((Player) e.getDamager())) {
@@ -100,7 +96,7 @@ public class SummonersStaff extends Item {
     }
 
     @Override
-    public void onEntityDeath(EntityDeathEvent e) {
+    public void onEntityDeath(@NotNull EntityDeathEvent e) {
         if(e.getEntity() instanceof Zombie) {
             for(Player player : zombies.keySet()) {
                 if(zombies.get(player).contains((Zombie) e.getEntity())) {

@@ -14,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 
+import javax.annotation.concurrent.Immutable;
 import java.util.Set;
 
 public final class SCWMain extends JavaPlugin implements Listener {

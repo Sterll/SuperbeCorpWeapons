@@ -17,21 +17,23 @@ import java.util.List;
 public class CommandWeapons implements CommandExecutor, TabCompleter {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        if(!(sender instanceof Player)) return false;
-        Player player = (Player) sender;
-        switch (args.length){
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @Nullable String s, @Nullable String[] args) {
+        if (!(sender instanceof Player)) return false;
+
+        @NotNull Player player = (Player) sender;
+
+        switch (args.length) {
             case 0:
                 ItemListGui.inventory.open(player);
                 return true;
             case 1:
-                if(args[0].equalsIgnoreCase("all")){
-                    for (ItemStack itemStack : ItemManager.getItems().keySet()) {
+                if (args[0].equalsIgnoreCase("all")) {
+                    for (@NotNull ItemStack itemStack : ItemManager.getItems().keySet()) {
                         player.getInventory().addItem(itemStack);
                     }
                 } else {
-                    for (ItemManager i : ItemManager.getItems().values()) {
-                        if(i.item().getKey().equalsIgnoreCase(args[0])){
+                    for (@NotNull ItemManager i : ItemManager.getItems().values()) {
+                        if (i.item().getKey().equalsIgnoreCase(args[0])) {
                             player.getInventory().addItem(i.item().getItem());
                             return true;
                         }
@@ -44,11 +46,12 @@ public class CommandWeapons implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        List<String> completions = new ArrayList<>();
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @Nullable String alias, @Nullable String[] args) {
+        @NotNull List<String> completions = new ArrayList<>();
+
         if (args.length == 1) {
             completions.add("all");
-            for (ItemManager i : ItemManager.getItems().values()) {
+            for (@NotNull ItemManager i : ItemManager.getItems().values()) {
                 completions.add(i.item().getKey());
             }
         }

@@ -4,6 +4,8 @@ import com.destroystokyo.paper.ParticleBuilder;
 import fr.yanis.superbecorpweapons.SCWMain;
 import fr.yanis.superbecorpweapons.item.management.AItem;
 import fr.yanis.superbecorpweapons.item.management.Item;
+import fr.yanis.superbecorpweapons.item.management.ItemManager;
+import fr.yanis.superbecorpweapons.item.management.config.IntConfig;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import fr.yanis.superbecorpweapons.utils.ParticleLib;
 import net.kyori.adventure.text.Component;
@@ -19,7 +21,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-@AItem(defaultName = "§cPistolet Explosif", defaultDescription = "§bC'est juste un pistolet qui fait boum", defaultCooldown = 5)
+@AItem(defaultName = "§cPistolet Explosif", defaultDescription = "§bC'est juste un pistolet qui fait boum", defaultCooldown = 5, intConfigValues = {
+        @IntConfig(name = "chicken_time", value = 5),
+        @IntConfig(name = "push_power", value = 2),
+        @IntConfig(name = "poison_time", value = 5)
+})
 public class ExplosiveGun extends Item {
 
     public ExplosiveGun(){
@@ -43,15 +49,15 @@ public class ExplosiveGun extends Item {
     @Override
     public void onUse(PlayerInteractEvent e) {
         Chicken entity = e.getPlayer().getWorld().spawn(e.getPlayer().getLocation(), Chicken.class);
-        entity.customName(Component.text("§cBooooooom dans §b5 §csecondes"));
+        entity.customName(Component.text("§cBooooooom dans §b" + ItemManager.getItem(getItem()).getSection().getString("chicken_time") +  "§csecondes"));
         entity.setCustomNameVisible(true);
         entity.setInvulnerable(true);
         entity.setGlowing(true);
-        entity.setVelocity(e.getPlayer().getLocation().getDirection().multiply(2));
+        entity.setVelocity(e.getPlayer().getLocation().getDirection().multiply(ItemManager.getItem(getItem()).getSection().getInt("push_power")));
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0);
 
         new BukkitRunnable(){
-            int time = 5;
+            int time = Integer.parseInt(ItemManager.getItem(getItem()).getSection().getString("cooldown"));
             @Override
             public void run() {
                 entity.customName(Component.text("§cBooooooom dans §b" + time + " §csecondes"));
@@ -72,6 +78,6 @@ public class ExplosiveGun extends Item {
     @Override
     public void whenEntityIsTouchedByParticle(Entity entity) {
         if(!(entity instanceof LivingEntity)) return;
-        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 5, 1));
+        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * ItemManager.getItem(getItem()).getSection().getInt("poison_time"), 1));
     }
 }

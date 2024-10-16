@@ -23,15 +23,18 @@ public abstract class Item {
 
     public abstract String getKey();
     public String getName(){
-        return ItemManager.getSection(getKey()).getString("name");
+        if(ItemManager.getSection(getKey()) == null) return getAnnotation().defaultName();
+        else return ItemManager.getSection(getKey()).getString("name");
     }
 
     public String getDescription(){
-        return ItemManager.getSection(getKey()).getString("description");o
+        if(ItemManager.getSection(getKey()) == null) return getAnnotation().defaultDescription();
+        else return ItemManager.getSection(getKey()).getString("description");
     }
 
     public int getCooldown(){
-        return ItemManager.getSection(getKey()).getInt("cooldown");
+        if(ItemManager.getSection(getKey()) == null) return getAnnotation().defaultCooldown();
+        else return ItemManager.getSection(getKey()).getInt("cooldown");
     }
 
     public abstract ItemStack getItem();

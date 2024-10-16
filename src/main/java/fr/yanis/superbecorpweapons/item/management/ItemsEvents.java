@@ -39,15 +39,6 @@ public class ItemsEvents implements Listener {
     }
 
     @EventHandler
-    public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event){
-        for (ItemManager value : ItemManager.getItems().values()) {
-            if(value.item().getItem().isSimilar(event.getPlayer().getActiveItem())) {
-                value.item().onUseAtEntity(event);
-            }
-        }
-    }
-
-    @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
         if(!(event.getEntity().getShooter() instanceof Player)) return;
         for (ItemManager value : ItemManager.getItems().values()) {

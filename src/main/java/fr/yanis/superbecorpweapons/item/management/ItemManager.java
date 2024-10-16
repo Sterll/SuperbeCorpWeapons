@@ -30,15 +30,23 @@ public record ItemManager(@NotNull Item item) {
 
     public ConfigurationSection getSection() { return getSection(item.getKey()); }
 
+    public static ItemManager getItem(ItemStack it) {
+        if(items.containsKey(it)) {
+            return items.get(it);
+        }
+        return null;
+    }
+
     public ItemManager {
         items.put(item.getItem(), this);
     }
 
     public void init(){
         try {
-            config.set(item.getKey() + ".name", item.getName());
-            config.set(item.getKey() + ".description", item.getDescription());
-            config.set(item.getKey() + ".cooldown", item.getCooldown());
+            config.set(item.getKey() + ".name", item.getAnnotation().defaultName());
+            config.set(item.getKey() + ".description", item.getAnnotation().defaultDescription());
+            config.set(item.getKey() + ".cooldown", item.getAnnotation().defaultCooldown());
+
             for (StringConfig stringConfig : item().getAnnotation().stringConfigValues()) {
                 config.set(item.getKey() + "." + stringConfig.name(), stringConfig.value());
             }

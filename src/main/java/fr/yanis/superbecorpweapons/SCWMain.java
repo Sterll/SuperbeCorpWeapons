@@ -30,9 +30,9 @@ public final class SCWMain extends JavaPlugin implements Listener {
         inventoryManager = new InventoryManager(this);
         inventoryManager.invoke();
 
-        loadAllItems();
-
         instance = this;
+
+        loadAllItems();
     }
 
     @Override
@@ -56,7 +56,7 @@ public final class SCWMain extends JavaPlugin implements Listener {
     }
 
     public void loadAllItems() {
-        Reflections reflections = new Reflections(p);
+        Reflections reflections = new Reflections("fr.yanis.superbecorpweapons.item");
         Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(AItem.class);
         for (Class<?> clazz : annotatedClasses) {
             try {
@@ -64,9 +64,12 @@ public final class SCWMain extends JavaPlugin implements Listener {
                     Class<?> specificScenarioClass = clazz;
                     Item itemInstance = (Item) specificScenarioClass.getDeclaredConstructor().newInstance();
                     new ItemManager(itemInstance);
+                    if(ItemManager.getSection(itemInstance.getKey()) == null){
+                        ItemManager.getItem(itemInstance.getItem()).init();
+                    }
                 }
             } catch (Exception e) {
-                getLogger().severe("Erreur lors du chargement du scénario " + clazz.getName());
+                getLogger().severe("Erreur lors du chargement de l'item " + clazz.getName());
                 e.printStackTrace();
             }
         }

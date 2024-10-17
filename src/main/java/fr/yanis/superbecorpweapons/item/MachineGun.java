@@ -4,6 +4,7 @@ import com.destroystokyo.paper.ParticleBuilder;
 import fr.yanis.superbecorpweapons.SCWMain;
 import fr.yanis.superbecorpweapons.item.management.AItem;
 import fr.yanis.superbecorpweapons.item.management.Item;
+import fr.yanis.superbecorpweapons.item.management.ItemManager;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
@@ -29,7 +30,7 @@ public class MachineGun extends Item {
     }
 
     @Override
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         return new ItemBuilder(Material.STICK)
                 .setName(Component.text(getName()))
                 .addLore(Component.text("§f")).addLore(Component.text(getDescription()))
@@ -38,12 +39,13 @@ public class MachineGun extends Item {
     }
 
     @Override
-    public void onUse(@NotNull PlayerInteractEvent e) {
+    public void onUse(@NotNull PlayerInteractEvent e, @NotNull ItemManager itemManager) {
         int amountOfShoot = 5;
         double spread = 0.1;
 
         for (int i = 0; i < amountOfShoot; i++) {
             Arrow arrow = e.getPlayer().launchProjectile(Arrow.class);
+
             arrow.setVelocity(
                     arrow.getVelocity().add(new Vector(
                             Math.random() * spread - spread / 2,
@@ -56,6 +58,7 @@ public class MachineGun extends Item {
             arrow.setCritical(false);
             arrow.setPickupStatus(Arrow.PickupStatus.DISALLOWED);
             arrow.customName(Component.text("machine_gun"));
+
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -72,15 +75,17 @@ public class MachineGun extends Item {
                             .spawn().particle();
                 }
             }.runTaskTimerAsynchronously(SCWMain.getInstance(), 0L, 0L);
+
             e.getPlayer().playSound(e.getPlayer().getLocation(), "minecraft:custom.machine_gun_sound", 1.0f, 1.0f);
         }
     }
 
     @Override
     public void onProjectileHit(@NotNull ProjectileHitEvent e) {
-        if(!(e.getEntity() instanceof Arrow)) return;
-        Arrow arrow = (Arrow) e.getEntity();
-        if(arrow.customName().equals(Component.text("machine_gun"))){
+        if (!(e.getEntity() instanceof Arrow arrow))
+            return;
+
+        if (Component.text("machine_gun").equals(arrow.customName())) {
             arrow.remove();
         }
     }

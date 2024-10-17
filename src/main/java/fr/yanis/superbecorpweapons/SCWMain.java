@@ -25,6 +25,7 @@ public final class SCWMain extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
         getCommand("weapons").setExecutor(new CommandWeapons());
         getServer().getPluginManager().registerEvents(new ItemsEvents(), this);
         getServer().getPluginManager().registerEvents(this, this);
@@ -54,8 +55,9 @@ public final class SCWMain extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onJoin(@NotNull PlayerJoinEvent e){
-        String url = "https://www.dropbox.com/scl/fi/4l2x2ggiu6d6cldq8k6tt/SandBlocks.zip?rlkey=b30gapdtre3mgjkp1t77vxfk6&st=zv5j7644&dl=1";
-        String hash = "fc07409081a6b1d98afab1be56a0664ae93c3baa";
+        String url = getConfig().getString("resource-pack.url");
+        String hash = getConfig().getString("resource-pack.hash");
+        if(url == null || hash == null) return;
         e.getPlayer().setResourcePack(url, hash);
     }
 

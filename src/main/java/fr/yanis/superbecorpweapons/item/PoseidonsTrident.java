@@ -3,6 +3,7 @@ package fr.yanis.superbecorpweapons.item;
 import fr.yanis.superbecorpweapons.SCWMain;
 import fr.yanis.superbecorpweapons.item.management.AItem;
 import fr.yanis.superbecorpweapons.item.management.Item;
+import fr.yanis.superbecorpweapons.item.management.ItemManager;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import fr.yanis.superbecorpweapons.utils.ParticleLib;
 import net.kyori.adventure.text.Component;
@@ -23,11 +24,11 @@ import java.util.ArrayList;
 @AItem(defaultName = "§bTrident de Poséidon", defaultDescription = "§bUn trident qui vous permet de lancer une vague", defaultCooldown = 10)
 public class PoseidonsTrident extends Item {
 
+    private ArrayList<Entity> alreadyHit = new ArrayList<>();
+
     public PoseidonsTrident(){
         super();
     }
-
-    private ArrayList<Entity> alreadyHit = new ArrayList<>();
 
     @Override
     public String getKey() {
@@ -35,7 +36,7 @@ public class PoseidonsTrident extends Item {
     }
 
     @Override
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         return new ItemBuilder(Material.STICK)
                 .setName(Component.text(getName()))
                 .addLore(Component.text("§f")).addLore(Component.text(getDescription()))
@@ -44,13 +45,13 @@ public class PoseidonsTrident extends Item {
     }
 
     @Override
-    public void onUse(@NotNull PlayerInteractEvent e) {
+    public void onUse(@NotNull PlayerInteractEvent e, @NotNull ItemManager itemManager) {
         ParticleLib.spawnWaterWaves(e.getPlayer(), this);
         e.getPlayer().playSound(e.getPlayer().getLocation(), "minecraft:custom.trident_sound", 1.0f, 1.0f);
     }
 
     @Override
-    public void whenEntityIsTouchedByParticle(@NotNull Entity entity) {
+    public void whenEntityIsTouchedByParticle(@NotNull Entity entity, @NotNull ItemManager itemManager) {
         if(!(entity instanceof LivingEntity)) return;
         if(alreadyHit.contains(entity)) return;
         ParticleLib.spawnRotatingCircle(entity, Color.BLUE);
@@ -58,7 +59,7 @@ public class PoseidonsTrident extends Item {
         new BukkitRunnable(){
             @Override
             public void run() {
-                entity.setVelocity(entity.getVelocity().setY(2));
+                Bukkit.getScheduler().runTask(SCWMain.getInstance(), () -> entity.setVelocity(entity.getVelocity().setY(2)));
                 alreadyHit.remove(entity);
             }
         }.runTaskLaterAsynchronously(SCWMain.getInstance(), 20 * 3);

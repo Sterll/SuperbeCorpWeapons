@@ -6,6 +6,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.NotNull;
@@ -44,6 +45,8 @@ public abstract class Item {
 
     public abstract ItemStack getItem();
     public abstract void onUse(@NotNull PlayerInteractEvent e);
+
+    public void onQuit(PlayerQuitEvent e){}
 
     public void onProjectileHit(@NotNull ProjectileHitEvent e){}
     public void onAttackEntity(@NotNull EntityDamageByEntityEvent e){}

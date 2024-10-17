@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,6 +37,13 @@ public class ItemsEvents implements Listener {
                     event.getPlayer().sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + value.item().getName() + " pendant encore " + value.item().getTimeLeft(event.getPlayer()) + " secondes"));
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        for (@NotNull ItemManager value : ItemManager.getItems().values()) {
+            value.item().onQuit(e);
         }
     }
 

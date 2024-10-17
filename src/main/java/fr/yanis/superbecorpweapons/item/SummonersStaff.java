@@ -13,9 +13,11 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -121,6 +123,16 @@ public class SummonersStaff extends Item {
                 zombie.remove();
                 zombies.get(player).remove(zombie);
             }
+        }
+    }
+
+    @Override
+    public void onQuit(PlayerQuitEvent e){
+        if(zombies.containsKey(e.getPlayer())){
+            for(Zombie zombie : zombies.get(e.getPlayer())){
+                zombie.remove();
+            }
+            zombies.remove(e.getPlayer());
         }
     }
 

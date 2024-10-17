@@ -57,6 +57,7 @@ public final class SCWMain extends JavaPlugin implements Listener {
 
         if (url == null || hash == null)
             return;
+
         e.getPlayer().setResourcePack(url, hash);
     }
 

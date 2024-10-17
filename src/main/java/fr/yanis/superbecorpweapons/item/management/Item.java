@@ -43,6 +43,7 @@ public abstract class Item {
         else return ItemManager.getSection(getKey()).getInt("cooldown");
     }
 
+    @NotNull
     public abstract ItemStack getItem();
     public abstract void onUse(@NotNull PlayerInteractEvent e);
 

@@ -4,22 +4,24 @@ import fr.yanis.superbecorpweapons.SCWMain;
 import fr.yanis.superbecorpweapons.item.management.config.BooleanConfig;
 import fr.yanis.superbecorpweapons.item.management.config.IntConfig;
 import fr.yanis.superbecorpweapons.item.management.config.StringConfig;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Objects;
 
 public record ItemManager(@NotNull Item item) {
 
-    private static HashMap<ItemStack, ItemManager> items = new HashMap<>();
+    private static HashMap<Byte, ItemManager> items = new HashMap<>();
 
     @NotNull
-    public static HashMap<ItemStack, ItemManager> getItems() {
+    public static HashMap<Byte, ItemManager> getItems() {
         return items;
     }
 
@@ -36,15 +38,13 @@ public record ItemManager(@NotNull Item item) {
     @Nullable
     public ConfigurationSection getSection() { return getSection(item.getKey()); }
 
-    public static ItemManager getItem(@NotNull ItemStack it) {
-        if(items.containsKey(it)) {
-            return items.get(it);
-        }
+    public static ItemManager getItem(byte id) {
+        if(items.containsKey(id)) return items.get(id);
         return null;
     }
 
     public ItemManager {
-        items.put(item.getItem(), this);
+        items.put(item.getItem().getPersistentDataContainer().get(Objects.requireNonNull(NamespacedKey.fromString("superbecorp"), "Impossible de trouver l'ID de cet item"), PersistentDataType.BYTE), this);
     }
 
     public void init(){

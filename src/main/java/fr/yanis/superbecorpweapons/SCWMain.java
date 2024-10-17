@@ -26,12 +26,12 @@ public final class SCWMain extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        getCommand("weapons").setExecutor(new CommandWeapons());
-        getServer().getPluginManager().registerEvents(new ItemsEvents(), this);
-        getServer().getPluginManager().registerEvents(this, this);
+        this.getCommand("weapons").setExecutor(new CommandWeapons());
+        this.getServer().getPluginManager().registerEvents(new ItemsEvents(), this);
+        this.getServer().getPluginManager().registerEvents(this, this);
 
-        inventoryManager = new InventoryManager(this);
-        inventoryManager.invoke();
+        this.inventoryManager = new InventoryManager(this);
+        this.inventoryManager.invoke();
 
         instance = this;
 
@@ -64,11 +64,13 @@ public final class SCWMain extends JavaPlugin implements Listener {
     public void loadAllItems() {
         Reflections reflections = new Reflections("fr.yanis.superbecorpweapons.item");
         Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(AItem.class);
+
         for (Class<?> clazz : annotatedClasses) {
             try {
                 if (Item.class.isAssignableFrom(clazz)) {
                     Class<?> specificScenarioClass = clazz;
                     Item itemInstance = (Item) specificScenarioClass.getDeclaredConstructor().newInstance();
+
                     ItemManager im = new ItemManager(itemInstance);
                     if(im.getSection() == null) im.init();
                 }

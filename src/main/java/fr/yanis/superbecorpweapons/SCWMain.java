@@ -1,7 +1,6 @@
 package fr.yanis.superbecorpweapons;
 
 import fr.yanis.superbecorpweapons.command.CommandWeapons;
-import fr.yanis.superbecorpweapons.item.*;
 import fr.yanis.superbecorpweapons.item.management.AItem;
 import fr.yanis.superbecorpweapons.item.management.Item;
 import fr.yanis.superbecorpweapons.item.management.ItemManager;
@@ -13,8 +12,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
-
-import javax.annotation.concurrent.Immutable;
 import java.util.Set;
 
 public final class SCWMain extends JavaPlugin implements Listener {
@@ -25,7 +22,7 @@ public final class SCWMain extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
+        this.saveDefaultConfig();
         this.getCommand("weapons").setExecutor(new CommandWeapons());
         this.getServer().getPluginManager().registerEvents(new ItemsEvents(), this);
         this.getServer().getPluginManager().registerEvents(this, this);
@@ -57,7 +54,9 @@ public final class SCWMain extends JavaPlugin implements Listener {
     public void onJoin(@NotNull PlayerJoinEvent e){
         String url = getConfig().getString("resource-pack.url");
         String hash = getConfig().getString("resource-pack.hash");
-        if(url == null || hash == null) return;
+
+        if (url == null || hash == null)
+            return;
         e.getPlayer().setResourcePack(url, hash);
     }
 

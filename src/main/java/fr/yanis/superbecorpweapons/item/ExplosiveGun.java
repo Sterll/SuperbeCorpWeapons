@@ -22,6 +22,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 @AItem(defaultName = "§cPistolet Explosif", defaultDescription = "§bC'est juste un pistolet qui fait boum", defaultCooldown = 5, intConfigValues = {
         @IntConfig(name = "chicken_time", value = 5),
         @IntConfig(name = "push_power", value = 2),
@@ -48,17 +50,21 @@ public class ExplosiveGun extends Item {
     }
 
     @Override
-    public void onUse(@NotNull PlayerInteractEvent e) {
+    public void onUse(@NotNull PlayerInteractEvent e, @NotNull ItemManager itemManager) {
         Chicken entity = e.getPlayer().getWorld().spawn(e.getPlayer().getLocation(), Chicken.class);
-        entity.customName(Component.text("§cBooooooom dans §b" + ItemManager.getItem(getItem()).getSection().getString("chicken_time") +  "§csecondes"));
+        entity.customName(Component.text("§cBooooooom dans §b" +
+                Objects.requireNonNull(itemManager.getSection(),
+                        "La configuration pour le pouletn n'est pas trouvable")
+                        .getString("chicken_time") +  "§csecondes"));
         entity.setCustomNameVisible(true);
         entity.setInvulnerable(true);
         entity.setGlowing(true);
-        entity.setVelocity(e.getPlayer().getLocation().getDirection().multiply(ItemManager.getItem(getItem()).getSection().getInt("push_power")));
+        entity.setVelocity(e.getPlayer().getLocation().getDirection().multiply(itemManager.getSection().getInt("push_power")));
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0);
 
         new BukkitRunnable(){
-            int time = Integer.parseInt(ItemManager.getItem(getItem()).getSection().getString("cooldown"));
+            int time = Integer.parseInt(Objects.requireNonNull(itemManager.getSection().getString("cooldown"),
+                    "La configuration pour le pouletn n'est pas trouvable"));
             @Override
             public void run() {
                 entity.customName(Component.text("§cBooooooom dans §b" + time + " §csecondes"));
@@ -77,8 +83,10 @@ public class ExplosiveGun extends Item {
     }
 
     @Override
-    public void whenEntityIsTouchedByParticle(@NotNull Entity entity) {
+    public void whenEntityIsTouchedByParticle(@NotNull Entity entity, @NotNull ItemManager itemManager) {
         if(!(entity instanceof LivingEntity)) return;
-        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * ItemManager.getItem(getItem()).getSection().getInt("poison_time"), 1));
+        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * Objects.requireNonNull(itemManager.getSection(),
+                "La configuration pour le pouletn n'est pas trouvable")
+                .getInt("poison_time"), 1));
     }
 }

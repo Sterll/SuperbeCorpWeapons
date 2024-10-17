@@ -3,6 +3,7 @@ package fr.yanis.superbecorpweapons.item;
 import com.destroystokyo.paper.ParticleBuilder;
 import fr.yanis.superbecorpweapons.item.management.AItem;
 import fr.yanis.superbecorpweapons.item.management.Item;
+import fr.yanis.superbecorpweapons.item.management.ItemManager;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import fr.yanis.superbecorpweapons.utils.ParticleLib;
 import net.kyori.adventure.text.Component;
@@ -31,7 +32,7 @@ public class LaserGun extends Item {
     }
 
     @Override
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         return new ItemBuilder(Material.STICK)
                 .setName(Component.text(getName()))
                 .addLore(Component.text("§f")).addLore(Component.text(getDescription()))
@@ -40,17 +41,18 @@ public class LaserGun extends Item {
     }
 
     @Override
-    public void onUse(@NotNull PlayerInteractEvent e) {
-        createLaser(e.getPlayer(), e.getPlayer().getEyeLocation(), e.getPlayer().getLocation().getDirection(), e.getPlayer().getWorld(), 10, 50);
+    public void onUse(@NotNull PlayerInteractEvent e, @NotNull ItemManager itemManager) {
+        createLaser(e.getPlayer(), e.getPlayer().getEyeLocation(), e.getPlayer().getLocation().getDirection(), e.getPlayer().getWorld(), 10, 50, itemManager);
+
         e.getPlayer().playSound(e.getPlayer().getLocation(), "minecraft:custom.raygun_sound", 1.0f, 1.0f);
     }
 
     @Override
-    public void whenEntityIsTouchedByParticle(@NotNull Entity entity) {
+    public void whenEntityIsTouchedByParticle(@NotNull Entity entity, @NotNull ItemManager itemManager) {
         entity.getWorld().strikeLightning(entity.getLocation());
     }
 
-    public void createLaser(Player attacker, Location origin, Vector direction, World world, int maxReflections, double distance) {
+    public void createLaser(Player attacker, Location origin, Vector direction, World world, int maxReflections, double distance, ItemManager itemManager) {
         Location currentPos = origin.clone();
         Vector currentDirection = direction.clone().normalize();
         int reflections = 0;
@@ -66,12 +68,14 @@ public class LaserGun extends Item {
                     .count(1)
                     .extra(0)
                     .spawn();
-            currentPos.getNearbyEntities(0.5, 0.5, 0.5).forEach(entity -> {
+
+            currentPos.getNearbyEntities(0.1, 0.1, 0.1).forEach(entity -> {
                 if (entity == attacker) return;
-                whenEntityIsTouchedByParticle(entity);
+                whenEntityIsTouchedByParticle(entity, itemManager);
             });
 
             Block hitBlock = currentPos.getBlock();
+
             if (!hitBlock.isPassable()) {
                 BlockFace hitFace = getHitBlockFace(currentPos, hitBlock);
                 if (hitFace != BlockFace.SELF) {
@@ -115,4 +119,5 @@ public class LaserGun extends Item {
             return relative.getZ() > 0 ? BlockFace.SOUTH : BlockFace.NORTH;
         }
     }
+
 }

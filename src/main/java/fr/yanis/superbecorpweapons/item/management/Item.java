@@ -45,7 +45,7 @@ public abstract class Item {
 
     @NotNull
     public abstract ItemStack getItem();
-    public abstract void onUse(@NotNull PlayerInteractEvent e);
+    public abstract void onUse(@NotNull PlayerInteractEvent e, @NotNull ItemManager itemManager);
 
     public void onQuit(PlayerQuitEvent e){}
 
@@ -59,7 +59,7 @@ public abstract class Item {
         return cooldownTask.get(player).getTime();
     }
 
-    public void whenEntityIsTouchedByParticle(@NotNull Entity entity){}
+    public void whenEntityIsTouchedByParticle(@NotNull Entity entity, @NotNull ItemManager itemManager){}
 
     @NotNull
     public AItem getAnnotation() {

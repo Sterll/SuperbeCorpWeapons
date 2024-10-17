@@ -3,6 +3,7 @@ package fr.yanis.superbecorpweapons.item;
 import fr.yanis.superbecorpweapons.SCWMain;
 import fr.yanis.superbecorpweapons.item.management.AItem;
 import fr.yanis.superbecorpweapons.item.management.Item;
+import fr.yanis.superbecorpweapons.item.management.ItemManager;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import fr.yanis.superbecorpweapons.utils.ParticleLib;
 import net.kyori.adventure.text.Component;
@@ -24,11 +25,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 @AItem(defaultName = "§9Staff des invocateurs", defaultDescription = "§bC'est juste un baton qui invoque des mobs", defaultCooldown = 5)
 public class SummonersStaff extends Item {
 
-    private HashMap<Player, ArrayList<Zombie>> zombies = new HashMap<>();
+    private HashMap<UUID, ArrayList<Zombie>> zombies = new HashMap<>();
 
     public SummonersStaff() {
         super();
@@ -49,7 +51,7 @@ public class SummonersStaff extends Item {
     }
 
     @Override
-    public void onUse(@NotNull PlayerInteractEvent e) {
+    public void onUse(@NotNull PlayerInteractEvent e, @NotNull ItemManager itemManager) {
         Player player = e.getPlayer();
         Location[] possibleLocations = {
                 player.getLocation().add(4, 0, 0),  // Devant
@@ -73,24 +75,26 @@ public class SummonersStaff extends Item {
             return;
         }
 
-        Zombie zombie = player.getWorld().spawn(spawnLocation, Zombie.class);
-        zombie.customName(Component.text("§cZombie de §b" + e.getPlayer().getName()));
-        zombie.setCustomNameVisible(true);
-        zombie.setTarget(null);
-        zombie.setAdult();
-        zombie.setAI(true);
-        zombie.getEquipment().setHelmet(new ItemStack(Material.ZOMBIE_HEAD));
-        ParticleLib.spawnRandomParticles(zombie, Color.AQUA);
-        addZombie(e.getPlayer(), zombie);
-        moveZombie(zombie, e.getPlayer());
+        Zombie zombie = player.getWorld().spawn(spawnLocation, Zombie.class, z -> {
+            z.customName(Component.text("§cZombie de §b" + e.getPlayer().getName()));
+            z.setCustomNameVisible(true);
+            z.setTarget(null);
+            z.setAdult();
+            z.setAI(true);
+            z.getEquipment().setHelmet(new ItemStack(Material.ZOMBIE_HEAD));
+            ParticleLib.spawnRandomParticles(z, Color.AQUA);
+            addZombie(player.getUniqueId(), z);
+            moveZombie(z, e.getPlayer());
+        });
         e.getPlayer().playSound(e.getPlayer().getLocation(), "minecraft:custom.summoners_sound", 1.0f, 1.0f);
     }
 
     @Override
     public void onAttackEntity(@NotNull EntityDamageByEntityEvent e) {
         if(!(e.getDamager() instanceof Player)) return;
-        if(zombies.containsKey((Player) e.getDamager())) {
-            for(Zombie zombie : zombies.get((Player) e.getDamager())) {
+        UUID uuid = e.getDamager().getUniqueId();
+        if(zombies.containsKey(uuid)) {
+            for(Zombie zombie : zombies.get(uuid)) {
                 zombie.setTarget((LivingEntity) e.getEntity());
                 zombie.setAI(true);
             }
@@ -100,15 +104,15 @@ public class SummonersStaff extends Item {
     @Override
     public void onEntityDeath(@NotNull EntityDeathEvent e) {
         if(e.getEntity() instanceof Zombie) {
-            for(Player player : zombies.keySet()) {
-                if(zombies.get(player).contains((Zombie) e.getEntity())) {
-                    removeZombie(player, (Zombie) e.getEntity());
+            for(UUID uuid : zombies.keySet()) {
+                if(zombies.get(uuid).contains((Zombie) e.getEntity())) {
+                    removeZombie(uuid, (Zombie) e.getEntity());
                     return;
                 }
             }
         }
-        for (Player player : zombies.keySet()) {
-            for (Zombie zombie : zombies.get(player)) {
+        for (UUID uuid : zombies.keySet()) {
+            for (Zombie zombie : zombies.get(uuid)) {
                 if (zombie.getTarget() == e.getEntity()) {
                     zombie.setTarget(null);
                 }
@@ -118,34 +122,35 @@ public class SummonersStaff extends Item {
 
     @Override
     public void onDisable() {
-        for (Player player : zombies.keySet()) {
-            for (Zombie zombie : zombies.get(player)) {
+        for (UUID uuid : zombies.keySet()) {
+            for (Zombie zombie : zombies.get(uuid)) {
                 zombie.remove();
-                zombies.get(player).remove(zombie);
+                zombies.get(uuid).remove(zombie);
             }
         }
     }
 
     @Override
     public void onQuit(PlayerQuitEvent e){
-        if(zombies.containsKey(e.getPlayer())){
-            for(Zombie zombie : zombies.get(e.getPlayer())){
+        UUID uuid = e.getPlayer().getUniqueId();
+        if(zombies.containsKey(uuid)){
+            for(Zombie zombie : zombies.get(uuid)){
                 zombie.remove();
             }
-            zombies.remove(e.getPlayer());
+            zombies.remove(uuid);
         }
     }
 
-    public void addZombie(Player player, Zombie zombie) {
-        if (!zombies.containsKey(player)) {
-            zombies.put(player, new ArrayList<>());
+    public void addZombie(UUID uuid, Zombie zombie) {
+        if (!zombies.containsKey(uuid)) {
+            zombies.put(uuid, new ArrayList<>());
         }
-        zombies.get(player).add(zombie);
+        zombies.get(uuid).add(zombie);
     }
 
-    public void removeZombie(Player player, Zombie zombie) {
-        if (zombies.containsKey(player)) {
-            zombies.get(player).remove(zombie);
+    public void removeZombie(UUID uuid, Zombie zombie) {
+        if (zombies.containsKey(uuid)) {
+            zombies.get(uuid).remove(zombie);
         }
     }
 

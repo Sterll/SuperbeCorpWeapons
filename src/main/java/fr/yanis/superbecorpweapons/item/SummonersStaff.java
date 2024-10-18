@@ -25,16 +25,13 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @AItem(defaultName = "§9Staff des invocateurs", defaultDescription = "§bC'est juste un baton qui invoque des mobs", defaultCooldown = 5)
 public class SummonersStaff extends Item {
 
     // HashMap<UUID, Set<UUID>> : UUID du joueur, Set de UUID des zombies invoqués
-    private HashMap<UUID, Set<UUID>> zombies = new HashMap<>();
+    private HashMap<UUID, HashSet<UUID>> zombies = new HashMap<>();
 
     public SummonersStaff() {
         super();
@@ -184,7 +181,7 @@ public class SummonersStaff extends Item {
 
     public void addZombie(UUID uuid, UUID zombieUUID) {
         if (!zombies.containsKey(uuid)) {
-            zombies.put(uuid, Set.of());
+            zombies.put(uuid, new HashSet<>());
         }
 
         zombies.get(uuid).add(zombieUUID);

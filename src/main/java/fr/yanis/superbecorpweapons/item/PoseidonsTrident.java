@@ -21,11 +21,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @AItem(defaultName = "§bTrident de Poséidon", defaultDescription = "§bUn trident qui vous permet de lancer une vague", defaultCooldown = 10)
 public class PoseidonsTrident extends Item {
 
-    private ArrayList<Entity> alreadyHit = new ArrayList<>();
+    private HashSet<UUID> alreadyHit = new HashSet<>();
 
     public PoseidonsTrident(){
         super();
@@ -63,17 +66,19 @@ public class PoseidonsTrident extends Item {
     public void whenEntityIsTouchedByParticle(@NotNull Entity entity, @NotNull ItemManager itemManager) {
         if(!(entity instanceof LivingEntity))
             return;
-        if(alreadyHit.contains(entity))
+        UUID uuid = entity.getUniqueId();
+
+        if (alreadyHit.contains(uuid))
             return;
 
         ParticleLib.spawnRotatingCircle(entity, Color.BLUE);
 
-        alreadyHit.add(entity);
+        alreadyHit.add(uuid);
         new BukkitRunnable(){
             @Override
             public void run() {
                 Bukkit.getScheduler().runTask(SCWMain.getInstance(), () -> entity.setVelocity(entity.getVelocity().setY(2)));
-                alreadyHit.remove(entity);
+                alreadyHit.remove(uuid);
             }
         }.runTaskLaterAsynchronously(SCWMain.getInstance(), 20 * 3);
     }

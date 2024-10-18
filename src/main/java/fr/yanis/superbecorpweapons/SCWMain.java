@@ -49,7 +49,7 @@ public final class SCWMain extends JavaPlugin implements Listener {
 
     @NotNull
     public InventoryManager getInventoryManager() {
-        return inventoryManager;
+        return this.inventoryManager;
     }
 
     @EventHandler

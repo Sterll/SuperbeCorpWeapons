@@ -101,6 +101,7 @@ public class LaserGun extends Item {
                 }
             }
         }
+        this.alreadyHit.clear();
     }
 
     private Vector calculateReflection(Vector incoming, Vector normal) {
@@ -108,15 +109,15 @@ public class LaserGun extends Item {
     }
 
     private Vector getBlockNormal(BlockFace face) {
-        switch (face) {
-            case NORTH: return new Vector(0, 0, -1);
-            case SOUTH: return new Vector(0, 0, 1);
-            case WEST:  return new Vector(-1, 0, 0);
-            case EAST:  return new Vector(1, 0, 0);
-            case UP:    return new Vector(0, 1, 0);
-            case DOWN:  return new Vector(0, -1, 0);
-            default:    return new Vector(0, 0, 0);
-        }
+        return switch (face) {
+            case NORTH -> new Vector(0, 0, -1);
+            case SOUTH -> new Vector(0, 0, 1);
+            case WEST -> new Vector(-1, 0, 0);
+            case EAST -> new Vector(1, 0, 0);
+            case UP -> new Vector(0, 1, 0);
+            case DOWN -> new Vector(0, -1, 0);
+            default -> new Vector(0, 0, 0);
+        };
     }
 
     private BlockFace getHitBlockFace(Location location, Block block) {

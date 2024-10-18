@@ -95,5 +95,10 @@ public class MachineGun extends Item {
         if (Component.text("machine_gun").equals(arrow.customName())) {
             arrow.remove();
         }
+
+        if (e.getHitBlock() == null)
+            return;
+
+        e.getHitBlock().breakNaturally();
     }
 }

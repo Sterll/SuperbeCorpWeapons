@@ -164,6 +164,7 @@ public class SummonersStaff extends Item {
 
     @Override
     public void onQuit(PlayerQuitEvent e){
+        super.onQuit(e);
         UUID uuid = e.getPlayer().getUniqueId();
 
         if(zombies.containsKey(uuid)){

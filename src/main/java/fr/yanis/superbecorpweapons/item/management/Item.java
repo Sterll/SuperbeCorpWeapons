@@ -57,6 +57,7 @@ public abstract class Item {
 
     public void onProjectileHit(@NotNull ProjectileHitEvent e){}
     public void onAttackEntity(@NotNull EntityDamageByEntityEvent e){}
+    public void onEntityDeath(@NotNull EntityDeathEvent e){}
 
     public void onDisable(){}
 

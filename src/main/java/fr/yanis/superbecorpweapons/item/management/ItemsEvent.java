@@ -74,4 +74,11 @@ public class ItemsEvent implements Listener {
         }
     }
 
+    @EventHandler
+    public void onEntityDeath(@NotNull EntityDeathEvent event) {
+        for (@NotNull ItemManager value : ItemManager.getItems().values()) {
+            value.item().onEntityDeath(event);
+        }
+    }
+
 }

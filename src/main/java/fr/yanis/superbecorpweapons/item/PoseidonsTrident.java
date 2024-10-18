@@ -68,12 +68,12 @@ public class PoseidonsTrident extends Item {
             return;
         UUID uuid = entity.getUniqueId();
 
-        if (alreadyHit.contains(uuid))
+        if (this.alreadyHit.contains(uuid))
             return;
 
         ParticleLib.spawnRotatingCircle(entity, Color.BLUE);
 
-        alreadyHit.add(uuid);
+        this.alreadyHit.add(uuid);
         new BukkitRunnable(){
             @Override
             public void run() {

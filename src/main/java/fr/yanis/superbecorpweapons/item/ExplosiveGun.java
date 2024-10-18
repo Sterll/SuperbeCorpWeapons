@@ -70,7 +70,7 @@ public class ExplosiveGun extends Item {
         entity.setInvulnerable(true);
         entity.setGlowing(true);
         entity.setVelocity(e.getPlayer().getLocation().getDirection().multiply(itemManager.getSection().getInt("push_power")));
-        entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0);
+        Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED), "L'attribut GENERIC_MOVEMENT_SPEED n'a pu être trouvé").setBaseValue(0);
 
         new BukkitRunnable(){
             int time = Integer.parseInt(Objects.requireNonNull(itemManager.getSection().getString("cooldown"),

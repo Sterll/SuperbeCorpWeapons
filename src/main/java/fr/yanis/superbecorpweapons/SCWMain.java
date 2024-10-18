@@ -12,6 +12,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
+
+import java.util.Objects;
 import java.util.Set;
 
 public final class SCWMain extends JavaPlugin implements Listener {
@@ -23,7 +25,7 @@ public final class SCWMain extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
-        this.getCommand("weapons").setExecutor(new CommandWeapons());
+        Objects.requireNonNull(this.getCommand("weapons"), "La commande weapons n'a pas été trouvé").setExecutor(new CommandWeapons());
         this.getServer().getPluginManager().registerEvents(new ItemsEvent(), this);
         this.getServer().getPluginManager().registerEvents(this, this);
 

@@ -14,6 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 public class ItemsEvent implements Listener {
 
     @EventHandler
@@ -30,16 +32,17 @@ public class ItemsEvent implements Listener {
 
         byte id = itemStack.getPersistentDataContainer().get(ItemManager.key, PersistentDataType.BYTE);
         ItemManager value = ItemManager.getItems().get(id);
+        UUID uuid = player.getUniqueId();
         Item item = value.item();
 
-        item.cooldown.putIfAbsent(player.getUniqueId(), false);
+        item.cooldown.putIfAbsent(uuid, false);
 
-        if (!item.cooldown.get(id))
+        if (!item.cooldown.get(uuid))
             item.onUse(event, value);
 
         if (item.getCooldown() != 0) {
             @NotNull CoolDownTask coolDownTask = new CoolDownTask(value, event);
-            item.cooldown.put(player.getUniqueId(), true);
+            item.cooldown.put(uuid, true);
 
             player.sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + item.getName() + " pendant " + item.getCooldown() + " secondes"));
 
@@ -47,7 +50,7 @@ public class ItemsEvent implements Listener {
             item.cooldownTask.put(player.getUniqueId(), coolDownTask);
 
         } else {
-            player.sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + item.getName() + " pendant encore " + item.getTimeLeft(player.getUniqueId()) + " secondes"));
+            player.sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + item.getName() + " pendant encore " + item.getTimeLeft(uuid) + " secondes"));
         }
     }
 

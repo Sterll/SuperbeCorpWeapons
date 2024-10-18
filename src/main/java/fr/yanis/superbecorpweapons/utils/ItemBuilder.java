@@ -4,10 +4,12 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 
@@ -83,6 +85,11 @@ public class ItemBuilder {
         } else {
             removeEnchantment(Enchantment.LUCK_OF_THE_SEA);
         }
+        return this;
+    }
+
+    public ItemBuilder addPersistantData(NamespacedKey key, PersistentDataType dataType, Object value) {
+        itemMeta.getPersistentDataContainer().set(key, dataType, value);
         return this;
     }
 

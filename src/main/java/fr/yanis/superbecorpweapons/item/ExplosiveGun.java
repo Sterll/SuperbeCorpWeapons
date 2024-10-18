@@ -58,11 +58,14 @@ public class ExplosiveGun extends Item {
 
     @Override
     public void onUse(@NotNull PlayerInteractEvent e, @NotNull ItemManager itemManager) {
+
         Chicken entity = e.getPlayer().getWorld().spawn(e.getPlayer().getLocation(), Chicken.class);
+
         entity.customName(Component.text("§cBooooooom dans §b" +
                 Objects.requireNonNull(itemManager.getSection(),
                         "La configuration pour le pouletn n'est pas trouvable")
                         .getString("chicken_time") +  "§csecondes"));
+
         entity.setCustomNameVisible(true);
         entity.setInvulnerable(true);
         entity.setGlowing(true);
@@ -72,17 +75,22 @@ public class ExplosiveGun extends Item {
         new BukkitRunnable(){
             int time = Integer.parseInt(Objects.requireNonNull(itemManager.getSection().getString("cooldown"),
                     "La configuration pour le poulet n'est pas trouvable"));
+
             @Override
             public void run() {
                 entity.customName(Component.text("§cBooooooom dans §b" + time + " §csecondes"));
                 if(time == 0){
                     Location location = entity.getLocation();
                     entity.remove();
+
                     e.getPlayer().playSound(location, "minecraft:custom.explosive_sound", 1.0f, 1.0f);
                     ParticleLib.spawnDome(location, Color.fromRGB(0,255,0), 5, itemManager);
+
                     cancel();
+
                     return;
                 }
+
                 time--;
             }
         }.runTaskTimer(SCWMain.getInstance(), 0L, 20L);
@@ -91,7 +99,9 @@ public class ExplosiveGun extends Item {
 
     @Override
     public void whenEntityIsTouchedByParticle(@NotNull Entity entity, @NotNull ItemManager itemManager) {
-        if(!(entity instanceof LivingEntity)) return;
+        if(!(entity instanceof LivingEntity))
+            return;
+
         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * Objects.requireNonNull(itemManager.getSection(),
                 "La configuration pour le pouletn n'est pas trouvable")
                 .getInt("poison_time"), 1));

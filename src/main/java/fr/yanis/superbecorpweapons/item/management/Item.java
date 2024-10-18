@@ -49,11 +49,14 @@ public abstract class Item {
     public abstract byte getID();
     public abstract void onUse(@NotNull PlayerInteractEvent e, @NotNull ItemManager itemManager);
 
-    public void onQuit(PlayerQuitEvent e){}
+    @MustBeInvokedByOverriders
+    public void onQuit(PlayerQuitEvent e){
+        cooldown.remove(e.getPlayer().getUniqueId());
+        cooldownTask.remove(e.getPlayer().getUniqueId());
+    }
 
     public void onProjectileHit(@NotNull ProjectileHitEvent e){}
     public void onAttackEntity(@NotNull EntityDamageByEntityEvent e){}
-    public void onEntityDeath(@NotNull EntityDeathEvent e){}
 
     public void onDisable(){}
 

@@ -71,7 +71,7 @@ public class ExplosiveGun extends Item {
 
         new BukkitRunnable(){
             int time = Integer.parseInt(Objects.requireNonNull(itemManager.getSection().getString("cooldown"),
-                    "La configuration pour le pouletn n'est pas trouvable"));
+                    "La configuration pour le poulet n'est pas trouvable"));
             @Override
             public void run() {
                 entity.customName(Component.text("§cBooooooom dans §b" + time + " §csecondes"));

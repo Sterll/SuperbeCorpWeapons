@@ -41,12 +41,17 @@ public class ExplosiveGun extends Item {
     }
 
     @Override
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         return new ItemBuilder(Material.STICK)
                 .setName(Component.text(getName()))
                 .addLore(Component.text("§f")).addLore(Component.text(getDescription()))
                 .setCustomModelData(28)
                 .build();
+    }
+
+    @Override
+    public byte getID() {
+        return 1;
     }
 
     @Override
@@ -72,7 +77,7 @@ public class ExplosiveGun extends Item {
                     Location location = entity.getLocation();
                     entity.remove();
                     e.getPlayer().playSound(location, "minecraft:custom.explosive_sound", 1.0f, 1.0f);
-                    ParticleLib.spawnDome(location, Color.fromRGB(0,255,0), 5, ExplosiveGun.this);
+                    ParticleLib.spawnDome(location, Color.fromRGB(0,255,0), 5, itemManager);
                     cancel();
                     return;
                 }

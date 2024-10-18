@@ -12,11 +12,12 @@ import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public abstract class Item {
 
-    HashMap<Player, Boolean> cooldown = new HashMap<>();
-    HashMap<Player, CoolDownTask> cooldownTask = new HashMap<>();
+    HashMap<UUID, Boolean> cooldown = new HashMap<>();
+    HashMap<UUID, CoolDownTask> cooldownTask = new HashMap<>();
 
     AItem annotation;
 
@@ -45,6 +46,7 @@ public abstract class Item {
 
     @NotNull
     public abstract ItemStack getItem();
+    public abstract byte getID();
     public abstract void onUse(@NotNull PlayerInteractEvent e, @NotNull ItemManager itemManager);
 
     public void onQuit(PlayerQuitEvent e){}
@@ -55,8 +57,8 @@ public abstract class Item {
 
     public void onDisable(){}
 
-    public int getTimeLeft(@NotNull Player player){
-        return cooldownTask.get(player).getTime();
+    public int getTimeLeft(@NotNull UUID uuid){
+        return cooldownTask.get(uuid).getTime();
     }
 
     public void whenEntityIsTouchedByParticle(@NotNull Entity entity, @NotNull ItemManager itemManager){}

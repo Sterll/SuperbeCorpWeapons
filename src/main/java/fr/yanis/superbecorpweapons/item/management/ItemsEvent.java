@@ -10,33 +10,44 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemsEvents implements Listener {
+public class ItemsEvent implements Listener {
 
     @EventHandler
     public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
-        if (event.getItem() == null) return;
-        for (@NotNull ItemManager value : ItemManager.getItems().values()) {
-            if (value.item().getItem().isSimilar(event.getItem())) {
-                value.item().cooldown.putIfAbsent(event.getPlayer(), false);
+        if (event.getItem() == null)
+            return;
 
-                if (!value.item().cooldown.get(event.getPlayer())) {
-                    value.item().onUse(event);
+        ItemStack itemStack = event.getItem();
+        Player player = event.getPlayer();
 
-                    if (value.item().getCooldown() != 0) {
-                        value.item().cooldown.put(event.getPlayer(), true);
-                        event.getPlayer().sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + value.item().getName() + " pendant " + value.item().getCooldown() + " secondes"));
+        assert ItemManager.key != null;
+        if (!itemStack.getPersistentDataContainer().has(ItemManager.key, PersistentDataType.BYTE))
+            return;
 
-                        @NotNull CoolDownTask coolDownTask = new CoolDownTask(value, event);
-                        coolDownTask.runTaskTimerAsynchronously(SCWMain.getInstance(), 0, 20);
-                        value.item().cooldownTask.put(event.getPlayer(), coolDownTask);
-                    }
-                } else {
-                    event.getPlayer().sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + value.item().getName() + " pendant encore " + value.item().getTimeLeft(event.getPlayer()) + " secondes"));
-                }
+        byte id = itemStack.getPersistentDataContainer().get(ItemManager.key, PersistentDataType.BYTE);
+        ItemManager value = ItemManager.getItems().get(id);
+        Item item = value.item();
+
+        if (item.getItem().isSimilar(event.getItem())) {
+            item.cooldown.putIfAbsent(player.getUniqueId(), false);
+
+            if (!item.cooldown.get(id))
+                item.onUse(event, value);
+
+            if (item.getCooldown() != 0) {
+                item.cooldown.put(player.getUniqueId(), true);
+                player.sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + item.getName() + " pendant " + item.getCooldown() + " secondes"));
+                @NotNull CoolDownTask coolDownTask = new CoolDownTask(value, event);
+                coolDownTask.runTaskTimerAsynchronously(SCWMain.getInstance(), 0, 20);
+                value.item().cooldownTask.put(player.getUniqueId(), coolDownTask);
             }
+
+        } else {
+            player.sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + value.item().getName() + " pendant encore " + item.getTimeLeft(player.getUniqueId()) + " secondes"));
         }
     }
 
@@ -69,4 +80,5 @@ public class ItemsEvents implements Listener {
             value.item().onEntityDeath(event);
         }
     }
+
 }

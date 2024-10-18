@@ -7,6 +7,7 @@ import fr.yanis.superbecorpweapons.item.management.ItemManager;
 import fr.yanis.superbecorpweapons.utils.ItemBuilder;
 import fr.yanis.superbecorpweapons.utils.ParticleLib;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,12 +26,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
 
 @AItem(defaultName = "§9Staff des invocateurs", defaultDescription = "§bC'est juste un baton qui invoque des mobs", defaultCooldown = 5)
 public class SummonersStaff extends Item {
 
-    private HashMap<UUID, ArrayList<Zombie>> zombies = new HashMap<>();
+    // HashMap<UUID, Set<UUID>> : UUID du joueur, Set de UUID des zombies invoqués
+    private HashMap<UUID, Set<UUID>> zombies = new HashMap<>();
 
     public SummonersStaff() {
         super();
@@ -42,12 +45,17 @@ public class SummonersStaff extends Item {
     }
 
     @Override
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         return new ItemBuilder(Material.STICK)
                 .setName(Component.text(getName()))
                 .addLore(Component.text("§f")).addLore(Component.text(getDescription()))
                 .setCustomModelData(26)
                 .build();
+    }
+
+    @Override
+    public byte getID() {
+        return 0;
     }
 
     @Override
@@ -83,7 +91,7 @@ public class SummonersStaff extends Item {
             z.setAI(true);
             z.getEquipment().setHelmet(new ItemStack(Material.ZOMBIE_HEAD));
             ParticleLib.spawnRandomParticles(z, Color.AQUA);
-            addZombie(player.getUniqueId(), z);
+            addZombie(player.getUniqueId(), z.getUniqueId());
             moveZombie(z, e.getPlayer());
         });
         e.getPlayer().playSound(e.getPlayer().getLocation(), "minecraft:custom.summoners_sound", 1.0f, 1.0f);
@@ -91,66 +99,93 @@ public class SummonersStaff extends Item {
 
     @Override
     public void onAttackEntity(@NotNull EntityDamageByEntityEvent e) {
-        if(!(e.getDamager() instanceof Player)) return;
-        UUID uuid = e.getDamager().getUniqueId();
+        if (!(e.getDamager() instanceof Player player))
+            return;
+        if (!(e.getEntity() instanceof LivingEntity entity))
+            return;
+
+        UUID uuid = player.getUniqueId();
+
         if(zombies.containsKey(uuid)) {
-            for(Zombie zombie : zombies.get(uuid)) {
-                zombie.setTarget((LivingEntity) e.getEntity());
-                zombie.setAI(true);
+            for(UUID zombieUUID : zombies.get(uuid)) {
+                if(Bukkit.getEntity(zombieUUID) instanceof Zombie zombie){
+                    zombie.setTarget(entity);
+                    zombie.setAI(true);
+                }
             }
         }
+
     }
 
     @Override
     public void onEntityDeath(@NotNull EntityDeathEvent e) {
-        if(e.getEntity() instanceof Zombie) {
+
+        if (e.getEntity() instanceof Zombie zombie) {
+            UUID zombieUUID = zombie.getUniqueId();
             for(UUID uuid : zombies.keySet()) {
-                if(zombies.get(uuid).contains((Zombie) e.getEntity())) {
-                    removeZombie(uuid, (Zombie) e.getEntity());
+                if(zombies.get(uuid).contains(zombieUUID)) {
+                    removeZombie(uuid, zombieUUID);
                     return;
                 }
             }
         }
+
         for (UUID uuid : zombies.keySet()) {
-            for (Zombie zombie : zombies.get(uuid)) {
-                if (zombie.getTarget() == e.getEntity()) {
-                    zombie.setTarget(null);
+            for (UUID zombieUUID : zombies.get(uuid)) {
+
+                if (Bukkit.getEntity(zombieUUID) instanceof Zombie zombie){
+                    if (zombie.getTarget() == e.getEntity()) {
+                        zombie.setTarget(null);
+                    }
                 }
             }
         }
+
     }
 
     @Override
     public void onDisable() {
+
         for (UUID uuid : zombies.keySet()) {
-            for (Zombie zombie : zombies.get(uuid)) {
+            for (UUID zombieUUID : zombies.get(uuid)) {
+
+                if (!(Bukkit.getEntity(zombieUUID) instanceof Zombie zombie))
+                    return;
+
                 zombie.remove();
                 zombies.get(uuid).remove(zombie);
             }
         }
+
     }
 
     @Override
     public void onQuit(PlayerQuitEvent e){
         UUID uuid = e.getPlayer().getUniqueId();
+
         if(zombies.containsKey(uuid)){
-            for(Zombie zombie : zombies.get(uuid)){
+            for (UUID zombieUUID : zombies.get(uuid)){
+
+                if (!(Bukkit.getEntity(zombieUUID) instanceof Zombie zombie))
+                    return;
+
                 zombie.remove();
             }
             zombies.remove(uuid);
         }
+
     }
 
-    public void addZombie(UUID uuid, Zombie zombie) {
+    public void addZombie(UUID uuid, UUID zombieUUID) {
         if (!zombies.containsKey(uuid)) {
-            zombies.put(uuid, new ArrayList<>());
+            zombies.put(uuid, Set.of());
         }
-        zombies.get(uuid).add(zombie);
+        zombies.get(uuid).add(zombieUUID);
     }
 
-    public void removeZombie(UUID uuid, Zombie zombie) {
+    public void removeZombie(UUID uuid, UUID zombieUUID) {
         if (zombies.containsKey(uuid)) {
-            zombies.get(uuid).remove(zombie);
+            zombies.get(uuid).remove(zombieUUID);
         }
     }
 

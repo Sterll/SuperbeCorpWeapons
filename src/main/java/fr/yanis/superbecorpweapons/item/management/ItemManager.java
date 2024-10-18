@@ -20,13 +20,28 @@ public record ItemManager(@NotNull Item item) {
 
     private static HashMap<Byte, ItemManager> items = new HashMap<>();
 
+    public final static NamespacedKey key = NamespacedKey.fromString("superbecorp");
+
+    public final static File file = new File(SCWMain.getInstance().getDataFolder(), "items.yml");
+    public final static FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+
+    public ItemManager {
+        items.put(item.getID(), this);
+    }
+
+    @Nullable
+    public static ItemManager getItem(byte id) {
+
+        if(items.containsKey(id))
+            return items.get(id);
+
+        return null;
+    }
+
     @NotNull
     public static HashMap<Byte, ItemManager> getItems() {
         return items;
     }
-
-    public static File file = new File(SCWMain.getInstance().getDataFolder(), "items.yml");
-    public static FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
     @NotNull
     public static File getFile() { return file; }
@@ -38,16 +53,8 @@ public record ItemManager(@NotNull Item item) {
     @Nullable
     public ConfigurationSection getSection() { return getSection(item.getKey()); }
 
-    public static ItemManager getItem(byte id) {
-        if(items.containsKey(id)) return items.get(id);
-        return null;
-    }
-
-    public ItemManager {
-        items.put(item.getItem().getPersistentDataContainer().get(Objects.requireNonNull(NamespacedKey.fromString("superbecorp"), "Impossible de trouver l'ID de cet item"), PersistentDataType.BYTE), this);
-    }
-
     public void init(){
+
         try {
             config.set(item.getKey() + ".name", item.getAnnotation().defaultName());
             config.set(item.getKey() + ".description", item.getAnnotation().defaultDescription());
@@ -56,15 +63,19 @@ public record ItemManager(@NotNull Item item) {
             for (StringConfig stringConfig : item().getAnnotation().stringConfigValues()) {
                 config.set(item.getKey() + "." + stringConfig.name(), stringConfig.value());
             }
+
             for (IntConfig intConfig : item().getAnnotation().intConfigValues()) {
                 config.set(item.getKey() + "." + intConfig.name(), intConfig.value());
             }
+
             for (BooleanConfig booleanConfig : item().getAnnotation().booleanConfigValues()) {
                 config.set(item.getKey() + "." + booleanConfig.name(), booleanConfig.value());
             }
+
             config.save(file);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 }

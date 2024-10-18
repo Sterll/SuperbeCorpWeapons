@@ -41,6 +41,11 @@ public class LaserGun extends Item {
     }
 
     @Override
+    public byte getID() {
+        return 3;
+    }
+
+    @Override
     public void onUse(@NotNull PlayerInteractEvent e, @NotNull ItemManager itemManager) {
         createLaser(e.getPlayer(), e.getPlayer().getEyeLocation(), e.getPlayer().getLocation().getDirection(), e.getPlayer().getWorld(), 10, 50, itemManager);
 

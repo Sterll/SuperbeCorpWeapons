@@ -39,6 +39,11 @@ public class MachineGun extends Item {
     }
 
     @Override
+    public byte getID() {
+        return 4;
+    }
+
+    @Override
     public void onUse(@NotNull PlayerInteractEvent e, @NotNull ItemManager itemManager) {
         int amountOfShoot = 5;
         double spread = 0.1;

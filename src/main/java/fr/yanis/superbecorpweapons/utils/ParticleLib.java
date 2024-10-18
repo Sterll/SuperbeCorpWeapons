@@ -3,6 +3,7 @@ package fr.yanis.superbecorpweapons.utils;
 import com.destroystokyo.paper.ParticleBuilder;
 import fr.yanis.superbecorpweapons.SCWMain;
 import fr.yanis.superbecorpweapons.item.management.Item;
+import fr.yanis.superbecorpweapons.item.management.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -17,7 +18,7 @@ import java.util.Collection;
 
 public class ParticleLib {
 
-    public static void spawnDome(Location location, Color color, double maxR, Item item) {
+    public static void spawnDome(Location location, Color color, double maxR, ItemManager itemManager) {
         new BukkitRunnable() {
             double radius = 0;
             double maxRadius = maxR;
@@ -43,7 +44,7 @@ public class ParticleLib {
                         for (Entity entity : entities) {
                             if (entity.getWorld().equals(location.getWorld())
                                     && entity.getLocation().distanceSquared(location) <= 0.25) {
-                                item.whenEntityIsTouchedByParticle(entity);
+                                itemManager.item().whenEntityIsTouchedByParticle(entity, itemManager);
                             }
                         }
                         location.subtract(x, y, z);
@@ -54,7 +55,7 @@ public class ParticleLib {
         }.runTaskTimer(SCWMain.getInstance(), 0L, 0L);
     }
 
-    public static void spawnCircleAt(Location location, Color color, Item item){
+    public static void spawnCircleAt(Location location, Color color, ItemManager itemManager){
         new BukkitRunnable() {
             double radius = 0;
             Collection<? extends Entity> entities = location.getWorld().getNearbyEntities(location, 15, 15, 15);
@@ -77,7 +78,7 @@ public class ParticleLib {
                     for (Entity entity : entities) {
                         if (entity.getWorld().equals(location.getWorld())
                                 && entity.getLocation().distanceSquared(location) <= 0.25) {
-                            item.whenEntityIsTouchedByParticle(entity);
+                            itemManager.item().whenEntityIsTouchedByParticle(entity, itemManager);
                         }
                     }
                     location.subtract(x, 0, z);
@@ -117,7 +118,7 @@ public class ParticleLib {
         }.runTaskTimer(SCWMain.getInstance(), 0L, 2L);
     }
 
-    public static void spawnWaterWaves(Player player, Item item) {
+    public static void spawnWaterWaves(Player player, ItemManager itemManager) {
         Collection<? extends Entity> entities = player.getWorld().getNearbyEntities(player.getLocation(), 15, 15, 15);
 
         Location startLocation = player.getLocation().clone().add(player.getLocation().getDirection().normalize().multiply(5));
@@ -163,7 +164,7 @@ public class ParticleLib {
                         for (Entity entity : entities) {
                             if (entity.getWorld().equals(particleLocation.getWorld())
                                     && entity.getLocation().distanceSquared(particleLocation) <= 0.75) {
-                                item.whenEntityIsTouchedByParticle(entity);
+                                itemManager.item().whenEntityIsTouchedByParticle(entity, itemManager);
                             }
                         }
 
@@ -176,7 +177,7 @@ public class ParticleLib {
                         for (Entity entity : entities) {
                             if (entity.getWorld().equals(particleLocation.getWorld())
                                     && entity.getLocation().distanceSquared(particleLocation) <= 0.75) {
-                                item.whenEntityIsTouchedByParticle(entity);
+                                itemManager.item().whenEntityIsTouchedByParticle(entity, itemManager);
                             }
                         }
                     }

@@ -45,16 +45,27 @@ public class PoseidonsTrident extends Item {
     }
 
     @Override
+    public byte getID() {
+        return 2;
+    }
+
+    @Override
     public void onUse(@NotNull PlayerInteractEvent e, @NotNull ItemManager itemManager) {
-        ParticleLib.spawnWaterWaves(e.getPlayer(), this);
-        e.getPlayer().playSound(e.getPlayer().getLocation(), "minecraft:custom.trident_sound", 1.0f, 1.0f);
+        Player player = e.getPlayer();
+
+        ParticleLib.spawnWaterWaves(player, itemManager);
+        player.playSound(player.getLocation(), "minecraft:custom.trident_sound", 1.0f, 1.0f);
     }
 
     @Override
     public void whenEntityIsTouchedByParticle(@NotNull Entity entity, @NotNull ItemManager itemManager) {
-        if(!(entity instanceof LivingEntity)) return;
-        if(alreadyHit.contains(entity)) return;
+        if(!(entity instanceof LivingEntity))
+            return;
+        if(alreadyHit.contains(entity))
+            return;
+
         ParticleLib.spawnRotatingCircle(entity, Color.BLUE);
+
         alreadyHit.add(entity);
         new BukkitRunnable(){
             @Override

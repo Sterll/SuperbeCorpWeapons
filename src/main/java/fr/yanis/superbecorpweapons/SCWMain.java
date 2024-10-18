@@ -4,7 +4,7 @@ import fr.yanis.superbecorpweapons.command.CommandWeapons;
 import fr.yanis.superbecorpweapons.item.management.AItem;
 import fr.yanis.superbecorpweapons.item.management.Item;
 import fr.yanis.superbecorpweapons.item.management.ItemManager;
-import fr.yanis.superbecorpweapons.item.management.ItemsEvents;
+import fr.yanis.superbecorpweapons.item.management.ItemsEvent;
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,7 +24,7 @@ public final class SCWMain extends JavaPlugin implements Listener {
     public void onEnable() {
         this.saveDefaultConfig();
         this.getCommand("weapons").setExecutor(new CommandWeapons());
-        this.getServer().getPluginManager().registerEvents(new ItemsEvents(), this);
+        this.getServer().getPluginManager().registerEvents(new ItemsEvent(), this);
         this.getServer().getPluginManager().registerEvents(this, this);
 
         this.inventoryManager = new InventoryManager(this);

@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CommandWeapons implements CommandExecutor, TabCompleter {
 
@@ -28,16 +29,20 @@ public class CommandWeapons implements CommandExecutor, TabCompleter {
                 return true;
             case 1:
                 if (args[0].equalsIgnoreCase("all")) {
-                    for (@NotNull ItemStack itemStack : ItemManager.getItems().keySet()) {
-                        player.getInventory().addItem(itemStack);
+
+                    for (byte id : ItemManager.getItems().keySet()) {
+                        player.getInventory().addItem(Objects.requireNonNull(ItemManager.getItem(id), "Aucun item trouvé avec cet ID").item().getItem());
                     }
+
                 } else {
+
                     for (@NotNull ItemManager i : ItemManager.getItems().values()) {
                         if (i.item().getKey().equalsIgnoreCase(args[0])) {
                             player.getInventory().addItem(i.item().getItem());
                             return true;
                         }
                     }
+
                     player.sendMessage("§cL'item " + args[0] + " n'existe pas !");
                     return true;
                 }

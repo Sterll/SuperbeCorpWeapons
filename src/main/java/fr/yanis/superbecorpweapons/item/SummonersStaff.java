@@ -156,7 +156,7 @@ public class SummonersStaff extends Item {
                     return;
 
                 zombie.remove();
-                zombies.get(uuid).remove(zombie);
+                zombies.get(uuid).remove(zombieUUID);
             }
         }
 

@@ -83,7 +83,7 @@ public class SummonersStaff extends Item {
             return;
         }
 
-        Zombie zombie = player.getWorld().spawn(spawnLocation, Zombie.class, z -> {
+        player.getWorld().spawn(spawnLocation, Zombie.class, z -> {
             z.customName(Component.text("§cZombie de §b" + e.getPlayer().getName()));
             z.setCustomNameVisible(true);
             z.setTarget(null);
@@ -106,7 +106,10 @@ public class SummonersStaff extends Item {
 
         UUID uuid = player.getUniqueId();
 
-        if(zombies.containsKey(uuid)) {
+        if( zombies.containsKey(uuid)) {
+            if (zombies.get(uuid).isEmpty())
+                return;
+
             for(UUID zombieUUID : zombies.get(uuid)) {
                 if(Bukkit.getEntity(zombieUUID) instanceof Zombie zombie){
                     zombie.setTarget(entity);
@@ -180,6 +183,7 @@ public class SummonersStaff extends Item {
         if (!zombies.containsKey(uuid)) {
             zombies.put(uuid, Set.of());
         }
+
         zombies.get(uuid).add(zombieUUID);
     }
 

@@ -20,8 +20,13 @@ import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
+import java.util.UUID;
+
 @AItem(defaultName = "§aPistolet Laser", defaultDescription = "§bC'est juste un pistolet laser qui rebondit", defaultCooldown = 2)
 public class LaserGun extends Item {
+
+    private HashSet<UUID> alreadyHit = new HashSet<>();
 
     public LaserGun(){
         super();
@@ -49,14 +54,18 @@ public class LaserGun extends Item {
 
     @Override
     public void onUse(@NotNull PlayerInteractEvent e, @NotNull ItemManager itemManager) {
-        createLaser(e.getPlayer(), e.getPlayer().getEyeLocation(), e.getPlayer().getLocation().getDirection(), e.getPlayer().getWorld(), 10, 50, itemManager);
+        this.createLaser(e.getPlayer(), e.getPlayer().getEyeLocation(), e.getPlayer().getLocation().getDirection(), e.getPlayer().getWorld(), 10, 50, itemManager);
 
         e.getPlayer().playSound(e.getPlayer().getLocation(), "minecraft:custom.raygun_sound", 1.0f, 1.0f);
     }
 
     @Override
     public void whenEntityIsTouchedByParticle(@NotNull Entity entity, @NotNull ItemManager itemManager) {
+        if(this.alreadyHit.contains(entity.getUniqueId()))
+            return;
+
         entity.getWorld().strikeLightning(entity.getLocation());
+        this.alreadyHit.add(entity.getUniqueId());
     }
 
     public void createLaser(Player attacker, Location origin, Vector direction, World world, int maxReflections, double distance, ItemManager itemManager) {
@@ -78,16 +87,16 @@ public class LaserGun extends Item {
 
             currentPos.getNearbyEntities(0.1, 0.1, 0.1).forEach(entity -> {
                 if (entity == attacker) return;
-                whenEntityIsTouchedByParticle(entity, itemManager);
+                this.whenEntityIsTouchedByParticle(entity, itemManager);
             });
 
             Block hitBlock = currentPos.getBlock();
 
             if (!hitBlock.isPassable()) {
-                BlockFace hitFace = getHitBlockFace(currentPos, hitBlock);
+                BlockFace hitFace = this.getHitBlockFace(currentPos, hitBlock);
                 if (hitFace != BlockFace.SELF) {
                     Vector normal = getBlockNormal(hitFace);
-                    currentDirection = calculateReflection(currentDirection, normal);
+                    currentDirection = this.calculateReflection(currentDirection, normal);
                     reflections++;
                 }
             }

@@ -32,22 +32,22 @@ public class ItemsEvent implements Listener {
         ItemManager value = ItemManager.getItems().get(id);
         Item item = value.item();
 
-        if (item.getItem().isSimilar(event.getItem())) {
-            item.cooldown.putIfAbsent(player.getUniqueId(), false);
+        item.cooldown.putIfAbsent(player.getUniqueId(), false);
 
-            if (!item.cooldown.get(id))
-                item.onUse(event, value);
+        if (!item.cooldown.get(id))
+            item.onUse(event, value);
 
-            if (item.getCooldown() != 0) {
-                item.cooldown.put(player.getUniqueId(), true);
-                player.sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + item.getName() + " pendant " + item.getCooldown() + " secondes"));
-                @NotNull CoolDownTask coolDownTask = new CoolDownTask(value, event);
-                coolDownTask.runTaskTimerAsynchronously(SCWMain.getInstance(), 0, 20);
-                value.item().cooldownTask.put(player.getUniqueId(), coolDownTask);
-            }
+        if (item.getCooldown() != 0) {
+            @NotNull CoolDownTask coolDownTask = new CoolDownTask(value, event);
+            item.cooldown.put(player.getUniqueId(), true);
+
+            player.sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + item.getName() + " pendant " + item.getCooldown() + " secondes"));
+
+            coolDownTask.runTaskTimerAsynchronously(SCWMain.getInstance(), 0, 20);
+            item.cooldownTask.put(player.getUniqueId(), coolDownTask);
 
         } else {
-            player.sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + value.item().getName() + " pendant encore " + item.getTimeLeft(player.getUniqueId()) + " secondes"));
+            player.sendMessage(Component.text("§cVous ne pouvez pas réutiliser l'item : " + item.getName() + " pendant encore " + item.getTimeLeft(player.getUniqueId()) + " secondes"));
         }
     }
 

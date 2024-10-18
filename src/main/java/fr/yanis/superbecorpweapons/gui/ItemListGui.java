@@ -40,6 +40,7 @@ public class ItemListGui implements InventoryProvider {
                 player.sendMessage("§c§oVous êtes déjà sur la première page.");
                 return;
             }
+
             RyseInventory currentInventory = pagination.inventory();
             currentInventory.open(player, pagination.previous().page());
         }));
@@ -57,6 +58,7 @@ public class ItemListGui implements InventoryProvider {
         }
 
         int page = pagination.newInstance(pagination).next().page();
+
         contents.set(5, 6, IntelligentItem.of(new ItemBuilder(Material.ARROW)
                 .setAmount((pagination.isLast() ? 1 : page))
                 .setName(!pagination.isLast()
@@ -66,6 +68,7 @@ public class ItemListGui implements InventoryProvider {
                 player.sendMessage("§c§oVous êtes déjà sur la dernière page.");
                 return;
             }
+
             RyseInventory currentInventory = pagination.inventory();
             currentInventory.open(player, pagination.next().page());
         }));

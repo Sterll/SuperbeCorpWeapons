@@ -19,16 +19,14 @@ public class CommandWeapons implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @Nullable String s, @Nullable String[] args) {
-        if (!(sender instanceof Player)) return false;
-
-        @NotNull Player player = (Player) sender;
+        if (!(sender instanceof @NotNull Player player)) return false;
 
         switch (args.length) {
             case 0:
                 ItemListGui.inventory.open(player);
                 return true;
             case 1:
-                if (args[0].equalsIgnoreCase("all")) {
+                if ("all".equalsIgnoreCase(args[0])) {
 
                     for (byte id : ItemManager.getItems().keySet()) {
                         player.getInventory().addItem(Objects.requireNonNull(ItemManager.getItem(id), "Aucun item trouvé avec cet ID").item().getItem());

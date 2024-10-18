@@ -86,7 +86,7 @@ public class ExplosiveGun extends Item {
                     e.getPlayer().playSound(location, "minecraft:custom.explosive_sound", 1.0f, 1.0f);
                     ParticleLib.spawnDome(location, Color.fromRGB(0,255,0), 5, itemManager);
 
-                    cancel();
+                    this.cancel();
 
                     return;
                 }

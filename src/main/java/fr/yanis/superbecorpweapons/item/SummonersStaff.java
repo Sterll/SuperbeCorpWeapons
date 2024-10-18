@@ -195,12 +195,35 @@ public class SummonersStaff extends Item {
 
     public void moveZombie(Zombie zombie, Player player){
         new BukkitRunnable() {
+            private boolean teleportCooldown = false;
             @Override
             public void run() {
+
                 if (!zombie.isValid() || !player.isOnline()) {
                     this.cancel();
                     return;
                 }
+
+                if(teleportCooldown)
+                    return;
+
+                if (!zombie.getWorld().equals(player.getWorld())) {
+                    teleportCooldown = true;
+
+                    zombie.setAI(false);
+                    zombie.setTarget(null);
+                    zombie.teleport(player);
+
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            teleportCooldown = false;
+                        }
+                    }.runTaskLater(SCWMain.getInstance(), 40L);
+
+                    return;
+                }
+
                 if(zombie.getTarget() != player && zombie.getTarget() != null) return;
 
                 Location playerLocation = player.getLocation();

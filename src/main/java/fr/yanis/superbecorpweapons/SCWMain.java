@@ -27,7 +27,8 @@ public final class SCWMain extends JavaPlugin implements Listener {
         this.saveDefaultConfig();
         Objects.requireNonNull(this.getCommand("weapons"), "La commande weapons n'a pas été trouvé").setExecutor(new CommandWeapons());
         this.getServer().getPluginManager().registerEvents(new ItemsEvent(), this);
-        this.getServer().getPluginManager().registerEvents(this, this);
+        this.getServer().getPluginManager().registerEvents(new PlayerEvents(), this);
+
 
         this.inventoryManager = new InventoryManager(this);
         this.inventoryManager.invoke();
@@ -50,17 +51,6 @@ public final class SCWMain extends JavaPlugin implements Listener {
     @NotNull
     public InventoryManager getInventoryManager() {
         return this.inventoryManager;
-    }
-
-    @EventHandler
-    public void onJoin(@NotNull PlayerJoinEvent e){
-        String url = getConfig().getString("resource-pack.url");
-        String hash = getConfig().getString("resource-pack.hash");
-
-        if (url == null || hash == null)
-            return;
-
-        e.getPlayer().setResourcePack(url, hash);
     }
 
     public void loadAllItems() {
